@@ -1,0 +1,8 @@
+[  3%] Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj
+[ 11%] Built target gtest
+mingw32-make[2]: *** [CMakeFiles\vectorforge_lib.dir\build.make:199: CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj] Error 1
+mingw32-make[1]: *** [CMakeFiles\Makefile2:180: CMakeFiles/vectorforge_lib.dir/all] Error 2
+mingw32-make[1]: *** Waiting for unfinished jobs....
+[ 19%] Built target gtest_main
+[ 26%] Built target gmock
+mingw32-make: *** [Makefile:145: all] Error 2

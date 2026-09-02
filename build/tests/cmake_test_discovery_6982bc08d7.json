@@ -1,0 +1,81 @@
+{
+  "tests": 9,
+  "name": "AllTests",
+  "testsuites": [
+    {
+      "name": "IVFPQIndexTest",
+      "tests": 1,
+      "testsuite": [
+        {
+          "name": "TrainAddSearchRerank",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_ivfpq_index.cpp",
+          "line": 8
+        }
+      ]
+    },
+    {
+      "name": "IVFIndexTest",
+      "tests": 1,
+      "testsuite": [
+        {
+          "name": "TrainAddSearchL2",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_ivf_index.cpp",
+          "line": 8
+        }
+      ]
+    },
+    {
+      "name": "StorageTest",
+      "tests": 2,
+      "testsuite": [
+        {
+          "name": "SaveAndLoad",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_storage.cpp",
+          "line": 7
+        },
+        {
+          "name": "SaveAndLoadMmap",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_storage.cpp",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "name": "BruteForceIndexTest",
+      "tests": 2,
+      "testsuite": [
+        {
+          "name": "AddAndSearchL2",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_brute_force_index.cpp",
+          "line": 7
+        },
+        {
+          "name": "AddAndSearchCosine",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_brute_force_index.cpp",
+          "line": 26
+        }
+      ]
+    },
+    {
+      "name": "DatasetTest",
+      "tests": 3,
+      "testsuite": [
+        {
+          "name": "GenerateHasCorrectDimensions",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_dataset.cpp",
+          "line": 6
+        },
+        {
+          "name": "DeterministicGeneration",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_dataset.cpp",
+          "line": 12
+        },
+        {
+          "name": "Normalize",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_dataset.cpp",
+          "line": 19
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+if(EXISTS "C:/Users/dasra/Desktop/vector-forge/build/tests/vectorforge_tests[1]_tests.cmake")
+  include("C:/Users/dasra/Desktop/vector-forge/build/tests/vectorforge_tests[1]_tests.cmake")
+else()
+  add_test(vectorforge_tests_NOT_BUILT vectorforge_tests_NOT_BUILT)
+endif()

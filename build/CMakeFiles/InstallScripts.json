@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/dasra/Desktop/vector-forge/build/cmake_install.cmake",
+		"C:/Users/dasra/Desktop/vector-forge/build/tests/cmake_install.cmake",
+		"C:/Users/dasra/Desktop/vector-forge/build/_deps/googletest-build/cmake_install.cmake",
+		"C:/Users/dasra/Desktop/vector-forge/build/_deps/googletest-build/googlemock/cmake_install.cmake",
+		"C:/Users/dasra/Desktop/vector-forge/build/_deps/googletest-build/googletest/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
