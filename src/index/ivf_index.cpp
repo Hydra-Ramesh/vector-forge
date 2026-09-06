@@ -36,13 +36,13 @@ void IVFIndex::train(const std::vector<Vector>& training_data, size_t nlist, Met
     nlist_ = nlist;
     metric_ = metric;
 
-    size_t num_train = training_data.size();
-    std::vector<float> flat_data(num_train * dim_);
-    for (size_t i = 0; i < num_train; ++i) {
-        std::copy(training_data[i].begin(), training_data[i].end(), flat_data.begin() + i * dim_);
+    size_t training_vector_count = training_data.size();
+    std::vector<float> flat_data(training_vector_count * dim_);
+    for (size_t vector_index = 0; vector_index < training_vector_count; ++vector_index) {
+        std::copy(training_data[vector_index].begin(), training_data[vector_index].end(), flat_data.begin() + vector_index * dim_);
     }
 
-    centroids_ = train_kmeans(flat_data.data(), num_train, dim_, nlist_, metric_);
+    centroids_ = train_kmeans(flat_data.data(), training_vector_count, dim_, nlist_, metric_);
     list_ids_.resize(nlist_);
     list_vectors_.resize(nlist_);
     is_trained_ = true;
@@ -56,19 +56,19 @@ void IVFIndex::add(VectorId id, const Vector& vector) {
         throw std::invalid_argument("Vector dimension mismatch");
     }
 
-    float min_dist = std::numeric_limits<float>::max();
-    size_t best_c = 0;
-    const float* v_data = vector.data();
-    for (size_t c = 0; c < nlist_; ++c) {
-        float d = compute_distance(v_data, centroids_.data() + c * dim_, dim_, metric_);
-        if (d < min_dist) {
-            min_dist = d;
-            best_c = c;
+    float nearest_distance = std::numeric_limits<float>::max();
+    size_t nearest_list = 0;
+    const float* vector_data = vector.data();
+    for (size_t list_index = 0; list_index < nlist_; ++list_index) {
+        float distance = compute_distance(vector_data, centroids_.data() + list_index * dim_, dim_, metric_);
+        if (distance < nearest_distance) {
+            nearest_distance = distance;
+            nearest_list = list_index;
         }
     }
 
-    list_ids_[best_c].push_back(id);
-    list_vectors_[best_c].insert(list_vectors_[best_c].end(), vector.begin(), vector.end());
+    list_ids_[nearest_list].push_back(id);
+    list_vectors_[nearest_list].insert(list_vectors_[nearest_list].end(), vector.begin(), vector.end());
     num_vectors_++;
 }
 
@@ -91,11 +91,11 @@ std::vector<SearchResult> IVFIndex::search(const Vector& query, const SearchOpti
 
     // 1. Find top `nprobe` centroids
     std::priority_queue<SearchResult> centroid_queue;
-    for (size_t c = 0; c < nlist_; ++c) {
-        float d = compute_distance(q_data, centroids_.data() + c * dim_, dim_, options.metric);
+    for (size_t centroid_index = 0; centroid_index < nlist_; ++centroid_index) {
+        float distance = compute_distance(q_data, centroids_.data() + centroid_index * dim_, dim_, options.metric);
         if (centroid_queue.size() < nprobe) {
-            centroid_queue.push({c, d});
-        } else if (d < centroid_queue.top().distance) {
+            centroid_queue.push({centroid_index, distance});
+        } else if (distance < centroid_queue.top().distance) {
             centroid_queue.pop();
             centroid_queue.push({c, d});
         }
@@ -108,35 +108,35 @@ std::vector<SearchResult> IVFIndex::search(const Vector& query, const SearchOpti
     }
 
     // 2. Search only within target lists
-    int num_threads = 1;
+    int thread_count = 1;
 #ifdef _OPENMP
     #pragma omp parallel
     {
-        num_threads = omp_get_num_threads();
+        thread_count = omp_get_num_threads();
     }
 #endif
 
-    std::vector<std::priority_queue<SearchResult>> local_queues(num_threads);
+    std::vector<std::priority_queue<SearchResult>> local_queues(thread_count);
 
     #pragma omp parallel for
-    for (int64_t idx = 0; idx < static_cast<int64_t>(target_lists.size()); ++idx) {
-        size_t c = target_lists[idx];
-        int tid = 0;
+    for (int64_t target_offset = 0; target_offset < static_cast<int64_t>(target_lists.size()); ++target_offset) {
+        size_t list_index = target_lists[target_offset];
+        int thread_index = 0;
 #ifdef _OPENMP
-        tid = omp_get_thread_num();
+        thread_index = omp_get_thread_num();
 #endif
-        auto& q = local_queues[tid];
-        size_t list_size = list_ids_[c].size();
-        const VectorId* ids_ptr = list_ids_[c].data();
-        const float* vecs_ptr = list_vectors_[c].data();
+        auto& local_queue = local_queues[thread_index];
+        size_t list_size = list_ids_[list_index].size();
+        const VectorId* ids_data = list_ids_[list_index].data();
+        const float* vectors_data = list_vectors_[list_index].data();
 
-        for (size_t i = 0; i < list_size; ++i) {
-            float dist = compute_distance(q_data, vecs_ptr + i * dim_, dim_, options.metric);
-            if (q.size() < static_cast<size_t>(options.top_k)) {
-                q.push({ids_ptr[i], dist});
-            } else if (dist < q.top().distance) {
-                q.pop();
-                q.push({ids_ptr[i], dist});
+        for (size_t vector_index = 0; vector_index < list_size; ++vector_index) {
+            float distance = compute_distance(q_data, vectors_data + vector_index * dim_, dim_, options.metric);
+            if (local_queue.size() < static_cast<size_t>(options.top_k)) {
+                local_queue.push({ids_data[vector_index], distance});
+            } else if (distance < local_queue.top().distance) {
+                local_queue.pop();
+                local_queue.push({ids_data[vector_index], distance});
             }
         }
     }

@@ -1,0 +1,2 @@
+C:/Users/dasra/Desktop/vector-forge/build-clean/CMakeFiles/edit_cache.dir
+C:/Users/dasra/Desktop/vector-forge/build-clean/CMakeFiles/rebuild_cache.dir

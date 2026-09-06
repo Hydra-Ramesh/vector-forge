@@ -11,16 +11,16 @@ TEST(BruteForceIndexTest, AddAndSearchL2) {
     index.add(3, {0.0f, 2.0f, 0.0f, 0.0f});
     index.build();
 
-    SearchOptions opts;
-    opts.top_k = 2;
-    opts.metric = Metric::L2;
+    SearchOptions search_options;
+    search_options.top_k = 2;
+    search_options.metric = Metric::L2;
 
     Vector query = {0.1f, 0.0f, 0.0f, 0.0f};
-    auto results = index.search(query, opts);
+    auto results = index.search(query, search_options);
 
     ASSERT_EQ(results.size(), 2);
-    EXPECT_EQ(results[0].id, 1); // dist = 0.01
-    EXPECT_EQ(results[1].id, 2); // dist = 0.81
+    EXPECT_EQ(results[0].id, 1);
+    EXPECT_EQ(results[1].id, 2);
 }
 
 TEST(BruteForceIndexTest, AddAndSearchCosine) {
@@ -30,15 +30,15 @@ TEST(BruteForceIndexTest, AddAndSearchCosine) {
     index.add(3, {-1.0f, 0.0f});
     index.build();
 
-    SearchOptions opts;
-    opts.top_k = 2;
-    opts.metric = Metric::Cosine;
+    SearchOptions search_options;
+    search_options.top_k = 2;
+    search_options.metric = Metric::Cosine;
 
-    Vector query = {1.0f, 0.0f}; // Same as vector 1
-    auto results = index.search(query, opts);
+    Vector query = {1.0f, 0.0f};
+    auto results = index.search(query, search_options);
 
     ASSERT_EQ(results.size(), 2);
     EXPECT_EQ(results[0].id, 1);
     EXPECT_NEAR(results[0].distance, 0.0f, 1e-5);
-    EXPECT_EQ(results[1].id, 2); // Orthogonal, dist = 1.0
+    EXPECT_EQ(results[1].id, 2);
 }

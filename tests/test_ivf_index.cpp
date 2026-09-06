@@ -26,31 +26,29 @@ TEST(IVFIndexTest, TrainAddSearchL2) {
     ivf.build();
     exact.build();
     
-    SearchOptions opts;
-    opts.top_k = 10;
-    opts.metric = Metric::L2;
+    SearchOptions search_options;
+    search_options.top_k = 10;
+    search_options.metric = Metric::L2;
     
-    // Test recall
-    size_t num_queries = 10;
+    size_t query_count = 10;
     float total_recall = 0.0f;
-    for (size_t i = 0; i < num_queries; ++i) {
-        auto query = dataset[i];
-        auto ivf_res = ivf.search(query, opts, nprobe);
-        auto exact_res = exact.search(query, opts);
+    for (size_t query_index = 0; query_index < query_count; ++query_index) {
+        auto query = dataset[query_index];
+        auto approximate_results = ivf.search(query, search_options, nprobe);
+        auto exact_results = exact.search(query, search_options);
         
         int matches = 0;
-        for (const auto& r_ivf : ivf_res) {
-            for (const auto& r_exact : exact_res) {
-                if (r_ivf.id == r_exact.id) {
+        for (const auto& approximate_result : approximate_results) {
+            for (const auto& exact_result : exact_results) {
+                if (approximate_result.id == exact_result.id) {
                     matches++;
                     break;
                 }
             }
         }
-        total_recall += static_cast<float>(matches) / opts.top_k;
+        total_recall += static_cast<float>(matches) / search_options.top_k;
     }
     
-    float avg_recall = total_recall / num_queries;
-    // With nprobe=4 and nlist=10, recall should be extremely high, close to 1.0
-    EXPECT_GT(avg_recall, 0.8f);
+    float average_recall = total_recall / query_count;
+    EXPECT_GT(average_recall, 0.8f);
 }

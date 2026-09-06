@@ -9,163 +9,154 @@
 
 namespace vectorforge {
 
-VamanaIndex::VamanaIndex(size_t dim, size_t max_degree, size_t L, float alpha)
-    : dim_(dim), R_(max_degree), L_(L), alpha_(alpha), medoid_idx_(0), num_nodes_(0) {
-    node_size_bytes_ = sizeof(uint64_t) + sizeof(uint32_t) + dim_ * sizeof(float) + R_ * sizeof(size_t);
+VamanaIndex::VamanaIndex(size_t dimension, size_t max_degree, size_t candidate_list_size, float pruning_alpha)
+    : dimension_(dimension), max_degree_(max_degree), candidate_list_size_(candidate_list_size), pruning_alpha_(pruning_alpha), medoid_index_(0), num_nodes_(0) {
+    node_size_bytes_ = sizeof(uint64_t) + sizeof(uint32_t) + dimension_ * sizeof(float) + max_degree_ * sizeof(size_t);
 }
 
 VamanaIndex::~VamanaIndex() {}
 
-void VamanaIndex::add(uint64_t id, const std::vector<float>& vec) {
-    if (vec.size() != dim_) throw std::invalid_argument("Vector dimension mismatch");
+void VamanaIndex::add(uint64_t id, const std::vector<float>& vector) {
+    if (vector.size() != dimension_) throw std::invalid_argument("Vector dimension mismatch");
     
-    size_t idx = num_nodes_++;
+    size_t node_index = num_nodes_++;
     data_.resize(num_nodes_ * node_size_bytes_);
     
-    get_id(idx) = id;
-    get_num_neighbors(idx) = 0;
-    std::copy(vec.begin(), vec.end(), get_vector(idx));
+    get_id(node_index) = id;
+    get_num_neighbors(node_index) = 0;
+    std::copy(vector.begin(), vector.end(), get_vector(node_index));
 }
 
-float VamanaIndex::distance(const float* a, const float* b) const {
-    return compute_distance(a, b, dim_, Metric::L2);
+float VamanaIndex::distance(const float* left_vector, const float* right_vector) const {
+    return compute_distance(left_vector, right_vector, dimension_, Metric::L2);
 }
 
 size_t VamanaIndex::calculate_medoid() const {
     if (num_nodes_ == 0) return 0;
     
-    std::vector<float> centroid(dim_, 0.0f);
-    for (size_t i = 0; i < num_nodes_; ++i) {
-        const float* vec = get_vector(i);
-        for (size_t d = 0; d < dim_; ++d) {
-            centroid[d] += vec[d];
+    std::vector<float> centroid(dimension_, 0.0f);
+    for (size_t node_index = 0; node_index < num_nodes_; ++node_index) {
+        const float* node_vector = get_vector(node_index);
+        for (size_t dimension_index = 0; dimension_index < dimension_; ++dimension_index) {
+            centroid[dimension_index] += node_vector[dimension_index];
         }
     }
-    for (size_t d = 0; d < dim_; ++d) {
-        centroid[d] /= static_cast<float>(num_nodes_);
+    for (size_t dimension_index = 0; dimension_index < dimension_; ++dimension_index) {
+        centroid[dimension_index] /= static_cast<float>(num_nodes_);
     }
     
-    float min_dist = std::numeric_limits<float>::max();
-    size_t best_idx = 0;
-    for (size_t i = 0; i < num_nodes_; ++i) {
-        float d = distance(centroid.data(), get_vector(i));
-        if (d < min_dist) {
-            min_dist = d;
-            best_idx = i;
+    float nearest_distance = std::numeric_limits<float>::max();
+    size_t nearest_index = 0;
+    for (size_t node_index = 0; node_index < num_nodes_; ++node_index) {
+        float distance_to_centroid = distance(centroid.data(), get_vector(node_index));
+        if (distance_to_centroid < nearest_distance) {
+            nearest_distance = distance_to_centroid;
+            nearest_index = node_index;
         }
     }
-    return best_idx;
+    return nearest_index;
 }
 
-std::vector<std::pair<float, size_t>> VamanaIndex::greedy_search(const float* query, size_t start_idx, size_t L) const {
-    std::vector<std::pair<float, size_t>> top_L;
+std::vector<std::pair<float, size_t>> VamanaIndex::greedy_search(const float* query_vector, size_t start_index, size_t candidate_list_size) const {
+    std::vector<std::pair<float, size_t>> top_candidates;
     std::unordered_set<size_t> visited;
     
-    // Min-heap for candidates to explore
-    auto cmp = [](const std::pair<float, size_t>& a, const std::pair<float, size_t>& b) {
-        return a.first > b.first;
+    auto compare_distances = [](const std::pair<float, size_t>& left_candidate, const std::pair<float, size_t>& right_candidate) {
+        return left_candidate.first > right_candidate.first;
     };
-    std::priority_queue<std::pair<float, size_t>, std::vector<std::pair<float, size_t>>, decltype(cmp)> candidates(cmp);
+    std::priority_queue<std::pair<float, size_t>, std::vector<std::pair<float, size_t>>, decltype(compare_distances)> candidates(compare_distances);
     
-    float start_dist = distance(query, get_vector(start_idx));
-    candidates.push({start_dist, start_idx});
-    visited.insert(start_idx);
-    top_L.push_back({start_dist, start_idx});
+    float start_distance = distance(query_vector, get_vector(start_index));
+    candidates.push({start_distance, start_index});
+    visited.insert(start_index);
+    top_candidates.push_back({start_distance, start_index});
     
     while (!candidates.empty()) {
-        auto [dist_c, c] = candidates.top();
+        auto [candidate_distance, candidate_index] = candidates.top();
         candidates.pop();
         
-        // If the closest candidate is further than the worst in top_L, we can't improve
-        float worst_in_L = top_L.back().first;
-        if (top_L.size() == L && dist_c > worst_in_L) {
-            break; // Stop exploring if we are expanding nodes worse than our worst candidate
+        float worst_candidate_distance = top_candidates.back().first;
+        if (top_candidates.size() == candidate_list_size && candidate_distance > worst_candidate_distance) {
+            break;
         }
         
-        uint32_t num_neighbors = get_num_neighbors(c);
-        const size_t* neighbors = get_neighbors(c);
+        uint32_t neighbor_count = get_num_neighbors(candidate_index);
+        const size_t* neighbors = get_neighbors(candidate_index);
         
-        for (uint32_t i = 0; i < num_neighbors; ++i) {
-            size_t n = neighbors[i];
-            if (visited.find(n) == visited.end()) {
-                visited.insert(n);
-                float dist_n = distance(query, get_vector(n));
+        for (uint32_t neighbor_offset = 0; neighbor_offset < neighbor_count; ++neighbor_offset) {
+            size_t neighbor_index = neighbors[neighbor_offset];
+            if (visited.find(neighbor_index) == visited.end()) {
+                visited.insert(neighbor_index);
+                float neighbor_distance = distance(query_vector, get_vector(neighbor_index));
                 
-                // Add to top_L and keep sorted
-                auto it = std::lower_bound(top_L.begin(), top_L.end(), std::make_pair(dist_n, n),
-                                           [](const auto& a, const auto& b) { return a.first < b.first; });
-                if (it != top_L.end() || top_L.size() < L) {
-                    top_L.insert(it, {dist_n, n});
-                    if (top_L.size() > L) {
-                        top_L.pop_back();
+                auto insertion_point = std::lower_bound(top_candidates.begin(), top_candidates.end(), std::make_pair(neighbor_distance, neighbor_index),
+                                                   [](const auto& left_candidate, const auto& right_candidate) { return left_candidate.first < right_candidate.first; });
+                if (insertion_point != top_candidates.end() || top_candidates.size() < candidate_list_size) {
+                    top_candidates.insert(insertion_point, {neighbor_distance, neighbor_index});
+                    if (top_candidates.size() > candidate_list_size) {
+                        top_candidates.pop_back();
                     }
-                    candidates.push({dist_n, n});
+                    candidates.push({neighbor_distance, neighbor_index});
                 }
             }
         }
     }
-    return top_L;
+    return top_candidates;
 }
 
-void VamanaIndex::robust_prune(size_t idx, std::vector<std::pair<float, size_t>>& candidates, float alpha, size_t R) {
-    // Add current neighbors to candidates
-    uint32_t num_neighbors = get_num_neighbors(idx);
-    size_t* neighbors = get_neighbors(idx);
+void VamanaIndex::robust_prune(size_t node_index, std::vector<std::pair<float, size_t>>& candidates, float pruning_alpha, size_t max_degree) {
+    uint32_t neighbor_count = get_num_neighbors(node_index);
+    size_t* neighbors = get_neighbors(node_index);
     
-    std::unordered_set<size_t> V_set;
-    std::vector<std::pair<float, size_t>> V;
+    std::unordered_set<size_t> unique_neighbors;
+    std::vector<std::pair<float, size_t>> candidate_neighbors;
     
-    // Helper to add uniquely
-    auto add_to_V = [&](size_t n, float dist) {
-        if (n != idx && V_set.find(n) == V_set.end()) {
-            V_set.insert(n);
-            V.push_back({dist, n});
+    auto add_candidate = [&](size_t neighbor_index, float neighbor_distance) {
+        if (neighbor_index != node_index && unique_neighbors.find(neighbor_index) == unique_neighbors.end()) {
+            unique_neighbors.insert(neighbor_index);
+            candidate_neighbors.push_back({neighbor_distance, neighbor_index});
         }
     };
     
-    for (const auto& c : candidates) {
-        add_to_V(c.second, c.first);
+    for (const auto& candidate : candidates) {
+        add_candidate(candidate.second, candidate.first);
     }
-    for (uint32_t i = 0; i < num_neighbors; ++i) {
-        size_t n = neighbors[i];
-        add_to_V(n, distance(get_vector(idx), get_vector(n)));
+    for (uint32_t neighbor_offset = 0; neighbor_offset < neighbor_count; ++neighbor_offset) {
+        size_t neighbor_index = neighbors[neighbor_offset];
+        add_candidate(neighbor_index, distance(get_vector(node_index), get_vector(neighbor_index)));
     }
     
-    // Sort V by distance from idx
-    std::sort(V.begin(), V.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+    std::sort(candidate_neighbors.begin(), candidate_neighbors.end(), [](const auto& left_candidate, const auto& right_candidate) { return left_candidate.first < right_candidate.first; });
     
     std::vector<size_t> new_neighbors;
-    while (!V.empty() && new_neighbors.size() < R) {
-        // p_star is the closest in V
-        size_t p_star = V.front().second;
-        new_neighbors.push_back(p_star);
+    while (!candidate_neighbors.empty() && new_neighbors.size() < max_degree) {
+        size_t closest_neighbor = candidate_neighbors.front().second;
+        new_neighbors.push_back(closest_neighbor);
         
-        // Remove from V any p_prime where alpha * dist(p_star, p_prime) <= dist(idx, p_prime)
-        std::vector<std::pair<float, size_t>> remaining_V;
-        for (size_t i = 1; i < V.size(); ++i) {
-            size_t p_prime = V[i].second;
-            float dist_p_star_p_prime = distance(get_vector(p_star), get_vector(p_prime));
-            float dist_idx_p_prime = V[i].first;
+        std::vector<std::pair<float, size_t>> remaining_candidates;
+        for (size_t candidate_index = 1; candidate_index < candidate_neighbors.size(); ++candidate_index) {
+            size_t other_neighbor = candidate_neighbors[candidate_index].second;
+            float distance_between_neighbors = distance(get_vector(closest_neighbor), get_vector(other_neighbor));
+            float distance_from_node = candidate_neighbors[candidate_index].first;
             
-            if (alpha * dist_p_star_p_prime > dist_idx_p_prime) {
-                remaining_V.push_back(V[i]);
+            if (pruning_alpha * distance_between_neighbors > distance_from_node) {
+                remaining_candidates.push_back(candidate_neighbors[candidate_index]);
             }
         }
-        V = remaining_V;
+        candidate_neighbors = remaining_candidates;
     }
     
-    // Write back new neighbors
-    get_num_neighbors(idx) = static_cast<uint32_t>(new_neighbors.size());
-    for (size_t i = 0; i < new_neighbors.size(); ++i) {
-        neighbors[i] = new_neighbors[i];
+    get_num_neighbors(node_index) = static_cast<uint32_t>(new_neighbors.size());
+    for (size_t neighbor_offset = 0; neighbor_offset < new_neighbors.size(); ++neighbor_offset) {
+        neighbors[neighbor_offset] = new_neighbors[neighbor_offset];
     }
 }
 
 void VamanaIndex::build() {
     if (num_nodes_ == 0) return;
     
-    medoid_idx_ = calculate_medoid();
-    std::cout << "Calculated medoid index: " << medoid_idx_ << "\n";
+    medoid_index_ = calculate_medoid();
+    std::cout << "Calculated medoid index: " << medoid_index_ << "\n";
     
     // 1. Initialize random graph
     std::mt19937 rng(42);
@@ -176,9 +167,9 @@ void VamanaIndex::build() {
         
         size_t* neighbors = get_neighbors(i);
         uint32_t added = 0;
-        for (size_t j = 0; j < num_nodes_ && added < R_; ++j) {
-            if (indices[j] != i) {
-                neighbors[added++] = indices[j];
+        for (size_t candidate_offset = 0; candidate_offset < num_nodes_ && added < max_degree_; ++candidate_offset) {
+            if (indices[candidate_offset] != i) {
+                neighbors[added++] = indices[candidate_offset];
             }
         }
         get_num_neighbors(i) = added;
@@ -190,36 +181,35 @@ void VamanaIndex::build() {
     std::iota(perm.begin(), perm.end(), 0);
     std::shuffle(perm.begin(), perm.end(), rng);
     
-    auto process_pass = [&](float cur_alpha, const char* pass_name) {
-        for (size_t i = 0; i < num_nodes_; ++i) {
-            if (i > 0 && i % 1000 == 0) std::cout << "  [" << pass_name << "] Processed " << i << " nodes...\n";
-            size_t idx = perm[i];
-            auto candidates = greedy_search(get_vector(idx), medoid_idx_, L_);
-            robust_prune(idx, candidates, cur_alpha, R_);
+    auto process_pass = [&](float pass_alpha, const char* pass_name) {
+        for (size_t pass_index = 0; pass_index < num_nodes_; ++pass_index) {
+            if (pass_index > 0 && pass_index % 1000 == 0) std::cout << "  [" << pass_name << "] Processed " << pass_index << " nodes...\n";
+            size_t node_index = perm[pass_index];
+            auto candidates = greedy_search(get_vector(node_index), medoid_index_, candidate_list_size_);
+            robust_prune(node_index, candidates, pass_alpha, max_degree_);
             
             // Reverse edges
-            uint32_t num_neighbors = get_num_neighbors(idx);
-            const size_t* neighbors = get_neighbors(idx);
-            for (uint32_t j = 0; j < num_neighbors; ++j) {
-                size_t n = neighbors[j];
+            uint32_t neighbor_count = get_num_neighbors(node_index);
+            const size_t* neighbors = get_neighbors(node_index);
+            for (uint32_t neighbor_offset = 0; neighbor_offset < neighbor_count; ++neighbor_offset) {
+                size_t neighbor_index = neighbors[neighbor_offset];
                 
-                // Add idx to n's neighbors
-                uint32_t& n_num = get_num_neighbors(n);
-                size_t* n_neighbors = get_neighbors(n);
+                uint32_t& reverse_neighbor_count = get_num_neighbors(neighbor_index);
+                size_t* neighbor_list = get_neighbors(neighbor_index);
                 
                 bool found = false;
-                for (uint32_t k = 0; k < n_num; ++k) {
-                    if (n_neighbors[k] == idx) { found = true; break; }
+                for (uint32_t neighbor_offset = 0; neighbor_offset < reverse_neighbor_count; ++neighbor_offset) {
+                    if (neighbor_list[neighbor_offset] == node_index) { found = true; break; }
                 }
                 
                 if (!found) {
-                    if (n_num < R_) {
-                        n_neighbors[n_num++] = idx;
+                    if (reverse_neighbor_count < max_degree_) {
+                        neighbor_list[reverse_neighbor_count++] = node_index;
                     } else {
                         // Prune n if it exceeds R
-                        std::vector<std::pair<float, size_t>> n_candidates;
-                        n_candidates.push_back({distance(get_vector(n), get_vector(idx)), idx});
-                        robust_prune(n, n_candidates, cur_alpha, R_);
+                        std::vector<std::pair<float, size_t>> neighbor_candidates;
+                        neighbor_candidates.push_back({distance(get_vector(neighbor_index), get_vector(node_index)), node_index});
+                        robust_prune(neighbor_index, neighbor_candidates, pass_alpha, max_degree_);
                     }
                 }
             }
@@ -228,32 +218,31 @@ void VamanaIndex::build() {
     
     process_pass(1.0f, "Pass 1");
     
-    // 3. Pass 2: alpha = alpha_ (typically 1.2)
-    std::cout << "Vamana Pass 2 (alpha=" << alpha_ << ")...\n";
-    process_pass(alpha_, "Pass 2");
+    std::cout << "Vamana Pass 2 (alpha=" << pruning_alpha_ << ")...\n";
+    process_pass(pruning_alpha_, "Pass 2");
 }
 
 std::vector<SearchResult> VamanaIndex::search(const std::vector<float>& query, const SearchOptions& opts) const {
-    if (query.size() != dim_) throw std::invalid_argument("Query dimension mismatch");
+    if (query.size() != dimension_) throw std::invalid_argument("Query dimension mismatch");
     
-    size_t L_search = std::max(static_cast<size_t>(opts.top_k), L_);
-    auto top_L = greedy_search(query.data(), medoid_idx_, L_search);
+    size_t search_candidate_limit = std::max(static_cast<size_t>(opts.top_k), candidate_list_size_);
+    auto top_candidates = greedy_search(query.data(), medoid_index_, search_candidate_limit);
     
     std::vector<SearchResult> results;
-    size_t limit = std::min(static_cast<size_t>(opts.top_k), top_L.size());
-    for (size_t i = 0; i < limit; ++i) {
-        results.push_back({get_id(top_L[i].second), top_L[i].first});
+    size_t result_limit = std::min(static_cast<size_t>(opts.top_k), top_candidates.size());
+    for (size_t result_index = 0; result_index < result_limit; ++result_index) {
+        results.push_back({get_id(top_candidates[result_index].second), top_candidates[result_index].first});
     }
     return results;
 }
 
 void VamanaIndex::save(const std::string& filepath) const {
     std::ofstream out(filepath, std::ios::binary);
-    out.write(reinterpret_cast<const char*>(&dim_), sizeof(dim_));
-    out.write(reinterpret_cast<const char*>(&R_), sizeof(R_));
-    out.write(reinterpret_cast<const char*>(&L_), sizeof(L_));
-    out.write(reinterpret_cast<const char*>(&alpha_), sizeof(alpha_));
-    out.write(reinterpret_cast<const char*>(&medoid_idx_), sizeof(medoid_idx_));
+    out.write(reinterpret_cast<const char*>(&dimension_), sizeof(dimension_));
+    out.write(reinterpret_cast<const char*>(&max_degree_), sizeof(max_degree_));
+    out.write(reinterpret_cast<const char*>(&candidate_list_size_), sizeof(candidate_list_size_));
+    out.write(reinterpret_cast<const char*>(&pruning_alpha_), sizeof(pruning_alpha_));
+    out.write(reinterpret_cast<const char*>(&medoid_index_), sizeof(medoid_index_));
     out.write(reinterpret_cast<const char*>(&node_size_bytes_), sizeof(node_size_bytes_));
     out.write(reinterpret_cast<const char*>(&num_nodes_), sizeof(num_nodes_));
     
@@ -265,11 +254,11 @@ void VamanaIndex::load(const std::string& filepath) {
     std::ifstream in(filepath, std::ios::binary);
     if (!in.is_open()) throw std::runtime_error("Cannot open file");
     
-    in.read(reinterpret_cast<char*>(&dim_), sizeof(dim_));
-    in.read(reinterpret_cast<char*>(&R_), sizeof(R_));
-    in.read(reinterpret_cast<char*>(&L_), sizeof(L_));
-    in.read(reinterpret_cast<char*>(&alpha_), sizeof(alpha_));
-    in.read(reinterpret_cast<char*>(&medoid_idx_), sizeof(medoid_idx_));
+    in.read(reinterpret_cast<char*>(&dimension_), sizeof(dimension_));
+    in.read(reinterpret_cast<char*>(&max_degree_), sizeof(max_degree_));
+    in.read(reinterpret_cast<char*>(&candidate_list_size_), sizeof(candidate_list_size_));
+    in.read(reinterpret_cast<char*>(&pruning_alpha_), sizeof(pruning_alpha_));
+    in.read(reinterpret_cast<char*>(&medoid_index_), sizeof(medoid_index_));
     in.read(reinterpret_cast<char*>(&node_size_bytes_), sizeof(node_size_bytes_));
     in.read(reinterpret_cast<char*>(&num_nodes_), sizeof(num_nodes_));
     

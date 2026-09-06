@@ -14,7 +14,7 @@ public:
     // R: maximum out-degree of the graph
     // L: size of the candidate list for search
     // alpha: threshold parameter for robust pruning
-    VamanaIndex(size_t dim, size_t max_degree = 64, size_t L = 100, float alpha = 1.2f);
+    VamanaIndex(size_t dimension, size_t max_degree = 64, size_t candidate_list_size = 100, float pruning_alpha = 1.2f);
     ~VamanaIndex();
 
     // Add vectors to the index. Graph isn't fully optimized until build() is called.
@@ -29,52 +29,47 @@ public:
     void load(const std::string& filepath);
 
 private:
-    size_t dim_;
-    size_t R_;
-    size_t L_;
-    float alpha_;
-    size_t medoid_idx_; // index in data_, not the actual ID
+    size_t dimension_;
+    size_t max_degree_;
+    size_t candidate_list_size_;
+    float pruning_alpha_;
+    size_t medoid_index_;
 
-    // We store all node data contiguously in a massive byte array.
-    // This allows trivial zero-copy mmap() loading in the future.
-    // Memory layout per node: 
-    // [uint64_t id] [uint32_t num_neighbors] [float*dim vec] [size_t*R neighbors]
     size_t node_size_bytes_;
-    std::vector<uint8_t> data_; 
+    std::vector<uint8_t> data_;
     size_t num_nodes_;
     
-    // Helper accessors. Since data_ can reallocate, we ALWAYS use indices, never bare pointers.
-    inline float* get_vector(size_t idx) {
-        return (float*)(data_.data() + idx * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t));
+    inline float* get_vector(size_t node_index) {
+        return (float*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t));
     }
-    inline const float* get_vector(size_t idx) const {
-        return (const float*)(data_.data() + idx * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t));
-    }
-    
-    inline uint32_t& get_num_neighbors(size_t idx) {
-        return *(uint32_t*)(data_.data() + idx * node_size_bytes_ + sizeof(uint64_t));
-    }
-    inline uint32_t get_num_neighbors(size_t idx) const {
-        return *(const uint32_t*)(data_.data() + idx * node_size_bytes_ + sizeof(uint64_t));
+    inline const float* get_vector(size_t node_index) const {
+        return (const float*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t));
     }
     
-    inline size_t* get_neighbors(size_t idx) {
-        return (size_t*)(data_.data() + idx * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t) + dim_ * sizeof(float));
+    inline uint32_t& get_num_neighbors(size_t node_index) {
+        return *(uint32_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t));
     }
-    inline const size_t* get_neighbors(size_t idx) const {
-        return (const size_t*)(data_.data() + idx * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t) + dim_ * sizeof(float));
+    inline uint32_t get_num_neighbors(size_t node_index) const {
+        return *(const uint32_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t));
     }
     
-    inline uint64_t& get_id(size_t idx) {
-        return *(uint64_t*)(data_.data() + idx * node_size_bytes_);
+    inline size_t* get_neighbors(size_t node_index) {
+        return (size_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t) + dimension_ * sizeof(float));
     }
-    inline uint64_t get_id(size_t idx) const {
-        return *(const uint64_t*)(data_.data() + idx * node_size_bytes_);
+    inline const size_t* get_neighbors(size_t node_index) const {
+        return (const size_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t) + dimension_ * sizeof(float));
+    }
+    
+    inline uint64_t& get_id(size_t node_index) {
+        return *(uint64_t*)(data_.data() + node_index * node_size_bytes_);
+    }
+    inline uint64_t get_id(size_t node_index) const {
+        return *(const uint64_t*)(data_.data() + node_index * node_size_bytes_);
     }
 
-    float distance(const float* a, const float* b) const;
-    void robust_prune(size_t idx, std::vector<std::pair<float, size_t>>& candidates, float alpha, size_t R);
-    std::vector<std::pair<float, size_t>> greedy_search(const float* query, size_t start_idx, size_t L) const;
+    float distance(const float* left_vector, const float* right_vector) const;
+    void robust_prune(size_t node_index, std::vector<std::pair<float, size_t>>& candidates, float pruning_alpha, size_t max_degree);
+    std::vector<std::pair<float, size_t>> greedy_search(const float* query_vector, size_t start_index, size_t candidate_list_size) const;
     size_t calculate_medoid() const;
 };
 

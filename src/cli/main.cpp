@@ -38,8 +38,8 @@ int main(int argc, char** argv) {
         
         std::cout << "Adding vectors...\n";
         start = std::chrono::high_resolution_clock::now();
-        for (size_t i = 0; i < num_vectors; ++i) {
-            index.add(i, data[i]);
+        for (size_t vector_index = 0; vector_index < num_vectors; ++vector_index) {
+            index.add(vector_index, data[vector_index]);
         }
         index.build();
         end = std::chrono::high_resolution_clock::now();
@@ -52,8 +52,8 @@ int main(int argc, char** argv) {
         opts.metric = Metric::L2;
 
         start = std::chrono::high_resolution_clock::now();
-        for (size_t i = 0; i < 100; ++i) { // 100 queries
-            index.search(data[i], opts, nprobe);
+        for (size_t query_index = 0; query_index < 100; ++query_index) {
+            index.search(data[query_index], opts, nprobe);
         }
         end = std::chrono::high_resolution_clock::now();
         diff = end - start;
@@ -86,8 +86,8 @@ int main(int argc, char** argv) {
         
         std::cout << "Adding vectors...\n";
         t.reset();
-        for (size_t i = 0; i < num_vectors; ++i) {
-            index.add(i, data[i]);
+        for (size_t vector_index = 0; vector_index < num_vectors; ++vector_index) {
+            index.add(vector_index, data[vector_index]);
         }
         index.build();
         std::cout << "Adding took " << t.elapsed_ms() << " ms\n";
@@ -145,9 +145,9 @@ int main(int argc, char** argv) {
         Timer t;
         HNSWIndex index(dim, M, ef_construction);
         
-        for (size_t i = 0; i < num_vectors; ++i) {
-            index.add(i, data[i]);
-            if (i % 2000 == 0 && i > 0) std::cout << "Added " << i << " vectors...\n";
+        for (size_t vector_index = 0; vector_index < num_vectors; ++vector_index) {
+            index.add(vector_index, data[vector_index]);
+            if (vector_index % 2000 == 0 && vector_index > 0) std::cout << "Added " << vector_index << " vectors...\n";
         }
         std::cout << "Building took " << t.elapsed_ms() << " ms\n";
 
@@ -155,11 +155,10 @@ int main(int argc, char** argv) {
         SearchOptions opts;
         opts.top_k = 10;
         opts.metric = Metric::L2;
-        // currently efSearch is hardcoded to use std::max(opts.top_k, 50), we can just let it be.
 
         t.reset();
-        for (size_t i = 0; i < num_queries; ++i) {
-            index.search(query_data[i], opts);
+        for (size_t query_index = 0; query_index < num_queries; ++query_index) {
+            index.search(query_data[query_index], opts);
         }
         double total_time_ms = t.elapsed_ms();
         
@@ -183,8 +182,8 @@ int main(int argc, char** argv) {
         Timer t;
         VamanaIndex index(dim, R, L, alpha);
         
-        for (size_t i = 0; i < num_vectors; ++i) {
-            index.add(i, data[i]);
+        for (size_t vector_index = 0; vector_index < num_vectors; ++vector_index) {
+            index.add(vector_index, data[vector_index]);
         }
         std::cout << "Adding took " << t.elapsed_ms() << " ms\n";
         
@@ -199,8 +198,8 @@ int main(int argc, char** argv) {
         opts.metric = Metric::L2;
 
         t.reset();
-        for (size_t i = 0; i < num_queries; ++i) {
-            index.search(query_data[i], opts);
+        for (size_t query_index = 0; query_index < num_queries; ++query_index) {
+            index.search(query_data[query_index], opts);
         }
         double total_time_ms = t.elapsed_ms();
         

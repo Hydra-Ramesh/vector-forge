@@ -7,10 +7,10 @@
 namespace vectorforge {
 
 // Core distance calculation used across indices
-float compute_distance(const float* a, const float* b, size_t dim, Metric metric);
+float compute_distance(const float* left_vector, const float* right_vector, size_t dimension, Metric metric);
 
 // Lloyd's algorithm for K-Means clustering
 // Returns a flattened array of size (k * dim) containing the cluster centroids.
-std::vector<float> train_kmeans(const float* data, size_t num_vectors, size_t dim, size_t k, Metric metric, int max_iter = 50);
+std::vector<float> train_kmeans(const float* data, size_t vector_count, size_t dimension, size_t cluster_count, Metric metric, int max_iterations = 50);
 
 } // namespace vectorforge

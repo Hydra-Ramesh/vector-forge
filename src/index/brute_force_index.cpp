@@ -54,44 +54,44 @@ std::vector<SearchResult> BruteForceIndex::search(const Vector& query, const Sea
 
     if (num_vectors_ == 0) return {};
 
-    int num_threads = 1;
+    int thread_count = 1;
 #ifdef _OPENMP
     #pragma omp parallel
     {
-        num_threads = omp_get_num_threads();
+        thread_count = omp_get_num_threads();
     }
 #endif
 
-    std::vector<std::priority_queue<SearchResult>> local_queues(num_threads);
-    const float* q_ptr = query.data();
+    std::vector<std::priority_queue<SearchResult>> local_queues(thread_count);
+    const float* query_data = query.data();
 
     #pragma omp parallel for
-    for (int64_t i = 0; i < static_cast<int64_t>(num_vectors_); ++i) {
-        int tid = 0;
+    for (int64_t vector_index = 0; vector_index < static_cast<int64_t>(num_vectors_); ++vector_index) {
+        int thread_index = 0;
 #ifdef _OPENMP
-        tid = omp_get_thread_num();
+        thread_index = omp_get_thread_num();
 #endif
-        float dist = compute_distance(q_ptr, active_vectors_ + i * dim_, dim_, options.metric);
-        auto& q = local_queues[tid];
+        float distance = compute_distance(query_data, active_vectors_ + vector_index * dim_, dim_, options.metric);
+        auto& local_queue = local_queues[thread_index];
         
-        if (q.size() < static_cast<size_t>(options.top_k)) {
-            q.push({active_ids_[i], dist});
-        } else if (dist < q.top().distance) {
-            q.pop();
-            q.push({active_ids_[i], dist});
+        if (local_queue.size() < static_cast<size_t>(options.top_k)) {
+            local_queue.push({active_ids_[vector_index], distance});
+        } else if (distance < local_queue.top().distance) {
+            local_queue.pop();
+            local_queue.push({active_ids_[vector_index], distance});
         }
     }
 
     std::priority_queue<SearchResult> global_queue;
-    for (auto& q : local_queues) {
-        while (!q.empty()) {
+    for (auto& local_queue : local_queues) {
+        while (!local_queue.empty()) {
             if (global_queue.size() < static_cast<size_t>(options.top_k)) {
-                global_queue.push(q.top());
-            } else if (q.top().distance < global_queue.top().distance) {
+                global_queue.push(local_queue.top());
+            } else if (local_queue.top().distance < global_queue.top().distance) {
                 global_queue.pop();
-                global_queue.push(q.top());
+                global_queue.push(local_queue.top());
             }
-            q.pop();
+            local_queue.pop();
         }
     }
 
@@ -181,14 +181,14 @@ void BruteForceIndex::load_mmap(const std::string& path) {
     }
     mmap_reader_->open(path);
 
-    const uint8_t* data = mmap_reader_->data();
-    size_t size = mmap_reader_->size();
+    const uint8_t* mapped_data = mmap_reader_->data();
+    size_t mapped_size = mmap_reader_->size();
 
-    if (size < sizeof(IndexHeader)) {
+    if (mapped_size < sizeof(IndexHeader)) {
         throw std::runtime_error("File too small to contain header");
     }
 
-    const IndexHeader* header = reinterpret_cast<const IndexHeader*>(data);
+    const IndexHeader* header = reinterpret_cast<const IndexHeader*>(mapped_data);
     
     if (std::memcmp(header->magic, MAGIC_BYTES, 8) != 0) {
         throw std::runtime_error("Invalid magic bytes, not a VectorForge file");
@@ -200,7 +200,7 @@ void BruteForceIndex::load_mmap(const std::string& path) {
     size_t expected_size = sizeof(IndexHeader) + 
                            header->count * sizeof(VectorId) + 
                            header->count * header->dimension * sizeof(float);
-    if (size != expected_size) {
+    if (mapped_size != expected_size) {
         throw std::runtime_error("File size does not match expected size from header");
     }
 
@@ -208,8 +208,8 @@ void BruteForceIndex::load_mmap(const std::string& path) {
     num_vectors_ = header->count;
 
     if (num_vectors_ > 0) {
-        active_ids_ = reinterpret_cast<const VectorId*>(data + sizeof(IndexHeader));
-        active_vectors_ = reinterpret_cast<const float*>(data + sizeof(IndexHeader) + num_vectors_ * sizeof(VectorId));
+        active_ids_ = reinterpret_cast<const VectorId*>(mapped_data + sizeof(IndexHeader));
+        active_vectors_ = reinterpret_cast<const float*>(mapped_data + sizeof(IndexHeader) + num_vectors_ * sizeof(VectorId));
     } else {
         active_ids_ = nullptr;
         active_vectors_ = nullptr;

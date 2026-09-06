@@ -10,22 +10,21 @@ TEST(DatasetTest, GenerateHasCorrectDimensions) {
 }
 
 TEST(DatasetTest, DeterministicGeneration) {
-    auto dataset1 = DatasetGenerator::generate(10, 16, 42);
-    auto dataset2 = DatasetGenerator::generate(10, 16, 42);
+    auto first_dataset = DatasetGenerator::generate(10, 16, 42);
+    auto second_dataset = DatasetGenerator::generate(10, 16, 42);
     
-    EXPECT_EQ(dataset1, dataset2);
+    EXPECT_EQ(first_dataset, second_dataset);
 }
 
 TEST(DatasetTest, Normalize) {
     auto dataset = DatasetGenerator::generate(10, 16);
     DatasetGenerator::normalize(dataset);
     
-    for (const auto& vec : dataset) {
-        float norm_sq = 0.0f;
-        for (float v : vec) {
-            norm_sq += v * v;
+    for (const auto& vector : dataset) {
+        float norm_squared = 0.0f;
+        for (float value : vector) {
+            norm_squared += value * value;
         }
-        // Should be close to 1.0
-        EXPECT_NEAR(norm_sq, 1.0f, 1e-5);
+        EXPECT_NEAR(norm_squared, 1.0f, 1e-5);
     }
 }

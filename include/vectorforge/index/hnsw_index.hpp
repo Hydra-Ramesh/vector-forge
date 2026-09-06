@@ -18,7 +18,7 @@ struct HNSWNode {
 
 class HNSWIndex {
 public:
-    HNSWIndex(size_t dim, int M = 16, int ef_construction = 100);
+    HNSWIndex(size_t dimension, int max_connections = 16, int construction_expansion = 100);
 
     // Adds a vector to the index. In HNSW, adding actually inserts it into the graph immediately.
     void add(VectorId id, const Vector& vector);
@@ -37,10 +37,10 @@ public:
 
 private:
     size_t dim_;
-    int M_;
-    int M0_; // Maximum connections for layer 0 (typically 2 * M)
-    int ef_construction_;
-    double mult_;
+    int max_connections_;
+    int max_layer_zero_connections_;
+    int construction_expansion_;
+    double level_multiplier_;
 
     size_t num_vectors_;
     int max_level_;
@@ -55,24 +55,24 @@ private:
     int generate_random_level();
     
     // internal methods
-    float distance(const float* a, const float* b) const;
+    float distance(const float* left_vector, const float* right_vector) const;
     
     // search layer returns the nearest neighbors found in the layer
     void search_layer(
-        const float* query, 
-        std::vector<int32_t>& eps, 
-        int ef, 
+        const float* query_vector,
+        std::vector<int32_t>& entry_points,
+        int search_expansion,
         int level,
-        std::priority_queue<std::pair<float, int32_t>>& top_candidates) const;
+        std::priority_queue<std::pair<float, int32_t>>& candidate_queue) const;
 
     // select neighbors using simple distance logic (can be upgraded to heuristic later)
     std::vector<int32_t> select_neighbors(
-        const float* query, 
-        std::priority_queue<std::pair<float, int32_t>>& candidates, 
-        int M, 
+        const float* query_vector,
+        std::priority_queue<std::pair<float, int32_t>>& candidates,
+        int max_neighbors,
         int level);
 
-    void insert(int32_t internal_idx, const float* vector);
+    void insert(int32_t internal_index, const float* vector);
 };
 
 } // namespace vectorforge

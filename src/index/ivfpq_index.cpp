@@ -40,19 +40,19 @@ void IVFPQIndex::train(const std::vector<Vector>& training_data, size_t nlist, M
     nlist_ = nlist;
     metric_ = metric;
 
-    size_t num_train = training_data.size();
-    std::vector<float> flat_data(num_train * dim_);
-    for (size_t i = 0; i < num_train; ++i) {
-        std::copy(training_data[i].begin(), training_data[i].end(), flat_data.begin() + i * dim_);
+    size_t training_vector_count = training_data.size();
+    std::vector<float> flat_data(training_vector_count * dim_);
+    for (size_t vector_index = 0; vector_index < training_vector_count; ++vector_index) {
+        std::copy(training_data[vector_index].begin(), training_data[vector_index].end(), flat_data.begin() + vector_index * dim_);
     }
 
     std::cout << "Training IVF centroids...\n";
-    centroids_ = train_kmeans(flat_data.data(), num_train, dim_, nlist_, metric_);
+    centroids_ = train_kmeans(flat_data.data(), training_vector_count, dim_, nlist_, metric_);
     
     // Typically for IVFPQ, PQ is trained on the residuals (data - centroid). 
     // For simplicity, we can train PQ on the absolute vectors.
     std::cout << "Training PQ codebooks...\n";
-    pq_.train_flat(flat_data.data(), num_train, metric_);
+    pq_.train_flat(flat_data.data(), training_vector_count, metric_);
 
     list_ids_.resize(nlist_);
     list_codes_.resize(nlist_);
@@ -68,23 +68,23 @@ void IVFPQIndex::add(VectorId id, const Vector& vector) {
     }
     
     const float* v_data = vector.data();
-    float min_dist = std::numeric_limits<float>::max();
-    size_t best_c = 0;
-    
-    for (size_t c = 0; c < nlist_; ++c) {
-        float d = compute_distance(v_data, centroids_.data() + c * dim_, dim_, metric_);
-        if (d < min_dist) {
-            min_dist = d;
-            best_c = c;
+    float nearest_distance = std::numeric_limits<float>::max();
+    size_t nearest_list = 0;
+
+    for (size_t list_index = 0; list_index < nlist_; ++list_index) {
+        float distance = compute_distance(v_data, centroids_.data() + list_index * dim_, dim_, metric_);
+        if (distance < nearest_distance) {
+            nearest_distance = distance;
+            nearest_list = list_index;
         }
     }
 
     std::vector<uint8_t> code = pq_.encode(v_data);
 
-    list_ids_[best_c].push_back(id);
-    list_codes_[best_c].insert(list_codes_[best_c].end(), code.begin(), code.end());
+    list_ids_[nearest_list].push_back(id);
+    list_codes_[nearest_list].insert(list_codes_[nearest_list].end(), code.begin(), code.end());
     if (store_raw_vectors_) {
-        list_raw_vectors_[best_c].insert(list_raw_vectors_[best_c].end(), vector.begin(), vector.end());
+        list_raw_vectors_[nearest_list].insert(list_raw_vectors_[nearest_list].end(), vector.begin(), vector.end());
     }
     num_vectors_++;
 }
@@ -115,7 +115,6 @@ std::vector<SearchResult> IVFPQIndex::search(const Vector& query, const SearchOp
 
     const float* q_data = query.data();
 
-    // 1. Find top nprobe centroids using std::nth_element (O(N) instead of O(N log K))
     Timer centroid_timer;
     std::vector<SearchResult> centroid_dists(nlist_);
     for (size_t c = 0; c < nlist_; ++c) {
@@ -132,12 +131,10 @@ std::vector<SearchResult> IVFPQIndex::search(const Vector& query, const SearchOp
     
     if (options.stats) options.stats->centroid_search_ms += centroid_timer.elapsed_ms();
 
-    // 2. Precompute LUT for ADC
     Timer lut_timer;
     std::vector<float> lut = pq_.compute_lut(q_data, options.metric);
     if (options.stats) options.stats->lut_compute_ms += lut_timer.elapsed_ms();
 
-    // We might need to keep more candidates if we want to rerank top N
     size_t keep_k = std::max(static_cast<size_t>(options.top_k), rerank_n);
 
     Timer scan_timer;
