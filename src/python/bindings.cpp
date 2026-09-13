@@ -22,6 +22,7 @@ PYBIND11_MODULE(vectorforge, m) {
     py::enum_<Metric>(m, "Metric")
         .value("L2", Metric::L2)
         .value("Cosine", Metric::Cosine)
+        .value("Hamming", Metric::Hamming)
         .export_values();
 
     py::class_<SearchResult>(m, "SearchResult")
@@ -33,7 +34,9 @@ PYBIND11_MODULE(vectorforge, m) {
         .def(py::init<>())
         .def_readwrite("top_k", &SearchOptions::top_k)
         .def_readwrite("metric", &SearchOptions::metric)
-        .def_readwrite("filter_mask", &SearchOptions::filter_mask);
+        .def_readwrite("filter_mask", &SearchOptions::filter_mask)
+        .def_readwrite("temporal_decay_factor", &SearchOptions::temporal_decay_factor)
+        .def_readwrite("query_timestamp", &SearchOptions::query_timestamp);
 
     py::class_<BruteForceIndex>(m, "BruteForceIndex")
         .def(py::init<size_t>(), py::arg("dimension"))

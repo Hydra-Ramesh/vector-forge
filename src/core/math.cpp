@@ -267,4 +267,45 @@ std::vector<float> train_kmeans(const float* data, size_t vector_count, size_t d
     return centroids;
 }
 
+std::vector<uint8_t> binarize_vector(const float* vec, size_t dim) {
+    size_t byte_count = (dim + 7) / 8;
+    std::vector<uint8_t> binarized(byte_count, 0);
+    for (size_t i = 0; i < dim; ++i) {
+        if (vec[i] > 0.0f) {
+            binarized[i / 8] |= (1 << (i % 8));
+        }
+    }
+    return binarized;
+}
+
+float compute_distance_hamming(const uint8_t* a, const uint8_t* b, size_t original_dim) {
+    size_t byte_count = (original_dim + 7) / 8;
+    size_t num_uint64 = byte_count / 8;
+    size_t remainder = byte_count % 8;
+    
+    const uint64_t* a_64 = reinterpret_cast<const uint64_t*>(a);
+    const uint64_t* b_64 = reinterpret_cast<const uint64_t*>(b);
+    
+    uint64_t distance = 0;
+    
+    for (size_t i = 0; i < num_uint64; ++i) {
+#if defined(_MSC_VER)
+        distance += __popcnt64(a_64[i] ^ b_64[i]);
+#else
+        distance += __builtin_popcountll(a_64[i] ^ b_64[i]);
+#endif
+    }
+    
+    size_t offset = num_uint64 * 8;
+    for (size_t i = 0; i < remainder; ++i) {
+#if defined(_MSC_VER)
+        distance += __popcnt16(a[offset + i] ^ b[offset + i]);
+#else
+        distance += __builtin_popcount(a[offset + i] ^ b[offset + i]);
+#endif
+    }
+    
+    return static_cast<float>(distance);
+}
+
 } // namespace vectorforge
