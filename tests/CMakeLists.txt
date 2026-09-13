@@ -13,6 +13,7 @@ add_executable(vectorforge_tests
     test_storage.cpp
     test_ivf_index.cpp
     test_ivfpq_index.cpp
+    test_vamana_index.cpp
 )
 target_link_libraries(vectorforge_tests PRIVATE vectorforge_lib GTest::gtest_main)
 
