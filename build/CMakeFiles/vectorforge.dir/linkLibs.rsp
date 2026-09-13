@@ -1,1 +1,0 @@
- libvectorforge_lib.a "C:/Program Files/WindowsApps/PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0/libs/python313.lib" C:/msys64/ucrt64/lib/libgomp.dll.a C:/msys64/ucrt64/lib/libmingwthrd.a -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
