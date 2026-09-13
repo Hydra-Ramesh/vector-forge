@@ -25,12 +25,16 @@ struct SearchStats {
 struct SearchOptions {
     int top_k = 10;
     Metric metric = Metric::L2;
+    uint64_t filter_mask = 0; // 0 means no filtering
     SearchStats* stats = nullptr;
 };
 
 struct SearchResult {
     VectorId id;
     float distance;
+    
+    SearchResult() = default;
+    SearchResult(VectorId i, float d) : id(i), distance(d) {}
     
     // For max-heap (to keep the smallest distances, we reverse the comparator)
     bool operator<(const SearchResult& other) const {
