@@ -2,6 +2,7 @@
 
 #include "vectorforge/core/types.hpp"
 #include <vector>
+#include <unordered_map>
 #include <cstdint>
 #include <cstddef>
 #include <string>
@@ -18,8 +19,14 @@ public:
     ~VamanaIndex();
 
     // Add vectors to the index. Graph isn't fully optimized until build() is called.
-    void add(uint64_t id, const std::vector<float>& vec);
+    void add(uint64_t id, const std::vector<float>& vec, uint64_t mask = 0);
     
+    // Logically delete a vector by ID
+    void remove(uint64_t id);
+    
+    // Compact the index to permanently remove logically deleted vectors and reconstruct graph
+    void compact();
+
     // Builds the Vamana graph (generates random graph, then refines via robust prune).
     void build(); 
     
@@ -39,25 +46,28 @@ private:
     std::vector<uint8_t> data_;
     size_t num_nodes_;
     
+    std::vector<bool> deleted_;
+    std::unordered_map<uint64_t, size_t> id_to_index_;
+    
     inline float* get_vector(size_t node_index) {
-        return (float*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t));
+        return (float*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint64_t) + sizeof(uint32_t));
     }
     inline const float* get_vector(size_t node_index) const {
-        return (const float*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t));
+        return (const float*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint64_t) + sizeof(uint32_t));
     }
     
     inline uint32_t& get_num_neighbors(size_t node_index) {
-        return *(uint32_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t));
+        return *(uint32_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint64_t));
     }
     inline uint32_t get_num_neighbors(size_t node_index) const {
-        return *(const uint32_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t));
+        return *(const uint32_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint64_t));
     }
     
     inline size_t* get_neighbors(size_t node_index) {
-        return (size_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t) + dimension_ * sizeof(float));
+        return (size_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint64_t) + sizeof(uint32_t) + dimension_ * sizeof(float));
     }
     inline const size_t* get_neighbors(size_t node_index) const {
-        return (const size_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint32_t) + dimension_ * sizeof(float));
+        return (const size_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t) + sizeof(uint64_t) + sizeof(uint32_t) + dimension_ * sizeof(float));
     }
     
     inline uint64_t& get_id(size_t node_index) {
@@ -67,9 +77,16 @@ private:
         return *(const uint64_t*)(data_.data() + node_index * node_size_bytes_);
     }
 
+    inline uint64_t& get_mask(size_t node_index) {
+        return *(uint64_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t));
+    }
+    inline uint64_t get_mask(size_t node_index) const {
+        return *(const uint64_t*)(data_.data() + node_index * node_size_bytes_ + sizeof(uint64_t));
+    }
+
     float distance(const float* left_vector, const float* right_vector) const;
     void robust_prune(size_t node_index, std::vector<std::pair<float, size_t>>& candidates, float pruning_alpha, size_t max_degree);
-    std::vector<std::pair<float, size_t>> greedy_search(const float* query_vector, size_t start_index, size_t candidate_list_size) const;
+    std::vector<std::pair<float, size_t>> greedy_search(const float* query_vector, size_t start_index, size_t candidate_list_size, uint64_t filter_mask = 0) const;
     size_t calculate_medoid() const;
 };
 
