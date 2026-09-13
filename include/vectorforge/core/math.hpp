@@ -6,8 +6,17 @@
 
 namespace vectorforge {
 
-// Core distance calculation used across indices
-float compute_distance(const float* left_vector, const float* right_vector, size_t dimension, Metric metric);
+typedef float (*DistanceFunction)(const float*, const float*, size_t, Metric);
+
+DistanceFunction get_distance_function();
+
+// Computes the distance between two vectors of given dimension
+float compute_distance(const std::vector<float>& a, const std::vector<float>& b, size_t dim, Metric metric = Metric::L2);
+
+// Computes the distance between a raw float array and a vector
+float compute_distance(const float* a, const std::vector<float>& b, size_t dim, Metric metric = Metric::L2);
+
+float compute_distance(const float* a, const float* b, size_t dim, Metric metric = Metric::L2);
 
 // Lloyd's algorithm for K-Means clustering
 // Returns a flattened array of size (k * dim) containing the cluster centroids.
