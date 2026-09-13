@@ -1,9 +1,0 @@
-1:IVFPQIndexTest.TrainAddSearchRerank
-2:IVFIndexTest.TrainAddSearchL2
-3:StorageTest.SaveAndLoad
-4:StorageTest.SaveAndLoadMmap
-5:BruteForceIndexTest.AddAndSearchL2
-6:BruteForceIndexTest.AddAndSearchCosine
-7:DatasetTest.GenerateHasCorrectDimensions
-8:DatasetTest.DeterministicGeneration
-9:DatasetTest.Normalize
