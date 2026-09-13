@@ -97,7 +97,7 @@ std::vector<SearchResult> IVFIndex::search(const Vector& query, const SearchOpti
             centroid_queue.push({centroid_index, distance});
         } else if (distance < centroid_queue.top().distance) {
             centroid_queue.pop();
-            centroid_queue.push({c, d});
+            centroid_queue.push({centroid_index, distance});
         }
     }
 
