@@ -76,8 +76,8 @@ test/fast: test
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
-	C:\msys64\ucrt64\bin\cmake.exe -E echo "No interactive CMake dialog available."
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
+	"C:\Program Files\CMake\bin\cmake-gui.exe" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -304,6 +304,30 @@ test_storage.cpp.s:
 	cd /d C:\Users\dasra\Desktop\vector-forge\build && $(MAKE) $(MAKESILENT) -f tests\CMakeFiles\vectorforge_tests.dir\build.make tests/CMakeFiles/vectorforge_tests.dir/test_storage.cpp.s
 .PHONY : test_storage.cpp.s
 
+test_vamana_index.obj: test_vamana_index.cpp.obj
+.PHONY : test_vamana_index.obj
+
+# target to build an object file
+test_vamana_index.cpp.obj:
+	cd /d C:\Users\dasra\Desktop\vector-forge\build && $(MAKE) $(MAKESILENT) -f tests\CMakeFiles\vectorforge_tests.dir\build.make tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj
+.PHONY : test_vamana_index.cpp.obj
+
+test_vamana_index.i: test_vamana_index.cpp.i
+.PHONY : test_vamana_index.i
+
+# target to preprocess a source file
+test_vamana_index.cpp.i:
+	cd /d C:\Users\dasra\Desktop\vector-forge\build && $(MAKE) $(MAKESILENT) -f tests\CMakeFiles\vectorforge_tests.dir\build.make tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.i
+.PHONY : test_vamana_index.cpp.i
+
+test_vamana_index.s: test_vamana_index.cpp.s
+.PHONY : test_vamana_index.s
+
+# target to generate assembly for a file
+test_vamana_index.cpp.s:
+	cd /d C:\Users\dasra\Desktop\vector-forge\build && $(MAKE) $(MAKESILENT) -f tests\CMakeFiles\vectorforge_tests.dir\build.make tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.s
+.PHONY : test_vamana_index.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -333,6 +357,9 @@ help:
 	@echo ... test_storage.obj
 	@echo ... test_storage.i
 	@echo ... test_storage.s
+	@echo ... test_vamana_index.obj
+	@echo ... test_vamana_index.i
+	@echo ... test_vamana_index.s
 .PHONY : help
 
 
