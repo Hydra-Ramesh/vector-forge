@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/vectorforge_tests.dir/test_ivfpq_index.cpp.obj.d"
   "CMakeFiles/vectorforge_tests.dir/test_storage.cpp.obj"
   "CMakeFiles/vectorforge_tests.dir/test_storage.cpp.obj.d"
+  "CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj"
+  "CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj.d"
   "libvectorforge_tests.dll.a"
   "vectorforge_tests.exe"
   "vectorforge_tests.exe.manifest"
