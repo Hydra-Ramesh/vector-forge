@@ -1,1 +1,1 @@
--I"C:/Users/dasra/Desktop/vector-forge/include"
+-I"C:/Users/dasra/Desktop/vector-forge/include" -isystem "C:/Users/dasra/Desktop/vector-forge/build/_deps/pybind11-src/include" -isystem "C:/Program Files/WindowsApps/PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0/Include"
