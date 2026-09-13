@@ -1,9 +1,9 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj"
-  "CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj.d"
+  "CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj"
+  "CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj.d"
   "libvectorforge.dll.a"
-  "vectorforge.exe"
-  "vectorforge.exe.manifest"
+  "vectorforge.cp313-win_amd64.pyd"
+  "vectorforge.cp313-win_amd64.pyd.manifest"
   "vectorforge.pdb"
 )
 
