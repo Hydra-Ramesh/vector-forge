@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = @CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
 
-CXX_FLAGS =  -O3 -march=native -mavx2 -mfma -ffast-math -fopenmp -O3 -DNDEBUG -std=c++20 -fopenmp
+CXX_FLAGS =  -O3 -ffast-math -march=native -mavx2 -mfma -fopenmp -std=c++20 -fopenmp
 
