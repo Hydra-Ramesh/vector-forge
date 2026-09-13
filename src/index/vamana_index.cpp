@@ -11,20 +11,64 @@ namespace vectorforge {
 
 VamanaIndex::VamanaIndex(size_t dimension, size_t max_degree, size_t candidate_list_size, float pruning_alpha)
     : dimension_(dimension), max_degree_(max_degree), candidate_list_size_(candidate_list_size), pruning_alpha_(pruning_alpha), medoid_index_(0), num_nodes_(0) {
-    node_size_bytes_ = sizeof(uint64_t) + sizeof(uint32_t) + dimension_ * sizeof(float) + max_degree_ * sizeof(size_t);
+    node_size_bytes_ = sizeof(uint64_t) + sizeof(uint64_t) + sizeof(uint32_t) + dimension_ * sizeof(float) + max_degree_ * sizeof(size_t);
 }
 
 VamanaIndex::~VamanaIndex() {}
 
-void VamanaIndex::add(uint64_t id, const std::vector<float>& vector) {
+void VamanaIndex::add(uint64_t id, const std::vector<float>& vector, uint64_t mask) {
     if (vector.size() != dimension_) throw std::invalid_argument("Vector dimension mismatch");
     
     size_t node_index = num_nodes_++;
     data_.resize(num_nodes_ * node_size_bytes_);
     
     get_id(node_index) = id;
+    get_mask(node_index) = mask;
     get_num_neighbors(node_index) = 0;
     std::copy(vector.begin(), vector.end(), get_vector(node_index));
+    
+    deleted_.push_back(false);
+    id_to_index_[id] = node_index;
+}
+
+void VamanaIndex::remove(uint64_t id) {
+    auto it = id_to_index_.find(id);
+    if (it != id_to_index_.end()) {
+        deleted_[it->second] = true;
+        id_to_index_.erase(it);
+    }
+}
+
+void VamanaIndex::compact() {
+    if (num_nodes_ == 0) return;
+    
+    std::vector<uint8_t> new_data;
+    std::vector<bool> new_deleted;
+    std::unordered_map<uint64_t, size_t> new_id_to_index;
+    
+    size_t new_num_nodes = 0;
+    
+    for (size_t i = 0; i < num_nodes_; ++i) {
+        if (!deleted_[i]) {
+            size_t new_idx = new_num_nodes++;
+            new_data.resize(new_num_nodes * node_size_bytes_);
+            
+            std::copy(data_.begin() + i * node_size_bytes_, 
+                      data_.begin() + (i + 1) * node_size_bytes_, 
+                      new_data.begin() + new_idx * node_size_bytes_);
+                      
+            uint64_t id = *(uint64_t*)(new_data.data() + new_idx * node_size_bytes_);
+            new_id_to_index[id] = new_idx;
+            new_deleted.push_back(false);
+        }
+    }
+    
+    data_ = std::move(new_data);
+    deleted_ = std::move(new_deleted);
+    id_to_index_ = std::move(new_id_to_index);
+    num_nodes_ = new_num_nodes;
+    
+    build(); // Rebuild graph
 }
 
 float VamanaIndex::distance(const float* left_vector, const float* right_vector) const {
@@ -57,7 +101,7 @@ size_t VamanaIndex::calculate_medoid() const {
     return nearest_index;
 }
 
-std::vector<std::pair<float, size_t>> VamanaIndex::greedy_search(const float* query_vector, size_t start_index, size_t candidate_list_size) const {
+std::vector<std::pair<float, size_t>> VamanaIndex::greedy_search(const float* query_vector, size_t start_index, size_t candidate_list_size, uint64_t filter_mask) const {
     std::vector<std::pair<float, size_t>> top_candidates;
     std::unordered_set<size_t> visited;
     
@@ -87,6 +131,15 @@ std::vector<std::pair<float, size_t>> VamanaIndex::greedy_search(const float* qu
             size_t neighbor_index = neighbors[neighbor_offset];
             if (visited.find(neighbor_index) == visited.end()) {
                 visited.insert(neighbor_index);
+                
+                // Metadata filtering check
+                if (filter_mask != 0) {
+                    uint64_t node_mask = get_mask(neighbor_index);
+                    if ((node_mask & filter_mask) != filter_mask) {
+                        continue; // Skip this node as it doesn't match the filter
+                    }
+                }
+                
                 float neighbor_distance = distance(query_vector, get_vector(neighbor_index));
                 
                 auto insertion_point = std::lower_bound(top_candidates.begin(), top_candidates.end(), std::make_pair(neighbor_distance, neighbor_index),
@@ -224,14 +277,18 @@ void VamanaIndex::build() {
 
 std::vector<SearchResult> VamanaIndex::search(const std::vector<float>& query, const SearchOptions& opts) const {
     if (query.size() != dimension_) throw std::invalid_argument("Query dimension mismatch");
+    if (num_nodes_ == 0) return {};
     
     size_t search_candidate_limit = std::max(static_cast<size_t>(opts.top_k), candidate_list_size_);
-    auto top_candidates = greedy_search(query.data(), medoid_index_, search_candidate_limit);
+    auto top_candidates = greedy_search(query.data(), medoid_index_, search_candidate_limit, opts.filter_mask);
     
     std::vector<SearchResult> results;
-    size_t result_limit = std::min(static_cast<size_t>(opts.top_k), top_candidates.size());
-    for (size_t result_index = 0; result_index < result_limit; ++result_index) {
-        results.push_back({get_id(top_candidates[result_index].second), top_candidates[result_index].first});
+    size_t returned_count = 0;
+    for (size_t result_index = 0; result_index < top_candidates.size() && returned_count < opts.top_k; ++result_index) {
+        if (!deleted_[top_candidates[result_index].second]) {
+            results.push_back({get_id(top_candidates[result_index].second), top_candidates[result_index].first});
+            returned_count++;
+        }
     }
     return results;
 }
@@ -248,6 +305,10 @@ void VamanaIndex::save(const std::string& filepath) const {
     
     size_t data_size = num_nodes_ * node_size_bytes_;
     out.write(reinterpret_cast<const char*>(data_.data()), data_size);
+    
+    std::vector<uint8_t> del_bytes(num_nodes_);
+    for(size_t i=0; i<num_nodes_; i++) del_bytes[i] = deleted_[i] ? 1 : 0;
+    out.write(reinterpret_cast<const char*>(del_bytes.data()), num_nodes_);
 }
 
 void VamanaIndex::load(const std::string& filepath) {
@@ -265,6 +326,16 @@ void VamanaIndex::load(const std::string& filepath) {
     size_t data_size = num_nodes_ * node_size_bytes_;
     data_.resize(data_size);
     in.read(reinterpret_cast<char*>(data_.data()), data_size);
+    
+    std::vector<uint8_t> del_bytes(num_nodes_);
+    if (in.read(reinterpret_cast<char*>(del_bytes.data()), num_nodes_)) {
+        deleted_.resize(num_nodes_);
+        id_to_index_.clear();
+        for(size_t i=0; i<num_nodes_; i++) {
+            deleted_[i] = del_bytes[i] == 1;
+            if (!deleted_[i]) id_to_index_[get_id(i)] = i;
+        }
+    }
 }
 
 } // namespace vectorforge
