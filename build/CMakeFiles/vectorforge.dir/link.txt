@@ -1,3 +1,3 @@
 C:\msys64\ucrt64\bin\cmake.exe -E rm -f CMakeFiles\vectorforge.dir/objects.a
 C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\vectorforge.dir/objects.a @CMakeFiles\vectorforge.dir\objects1.rsp
-C:\msys64\ucrt64\bin\c++.exe  -O3 -march=native -mavx2 -mfma -ffast-math -fopenmp -O3 -DNDEBUG -Wl,--whole-archive CMakeFiles\vectorforge.dir/objects.a -Wl,--no-whole-archive -o vectorforge.exe -Wl,--out-implib,libvectorforge.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\vectorforge.dir\linkLibs.rsp
+C:\msys64\ucrt64\bin\c++.exe  -O3 -ffast-math -march=native -mavx2 -mfma -fopenmp -shared -o vectorforge.cp313-win_amd64.pyd -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles\vectorforge.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\vectorforge.dir\linkLibs.rsp
