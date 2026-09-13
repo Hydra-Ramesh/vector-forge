@@ -1,7 +1,28 @@
 {
-  "tests": 9,
+  "tests": 12,
   "name": "AllTests",
   "testsuites": [
+    {
+      "name": "VamanaIndexTest",
+      "tests": 3,
+      "testsuite": [
+        {
+          "name": "BuildAndSearchL2",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_vamana_index.cpp",
+          "line": 8
+        },
+        {
+          "name": "RemoveAndCompact",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_vamana_index.cpp",
+          "line": 52
+        },
+        {
+          "name": "SaveAndLoadWithTombstones",
+          "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_vamana_index.cpp",
+          "line": 89
+        }
+      ]
+    },
     {
       "name": "IVFPQIndexTest",
       "tests": 1,
@@ -36,7 +57,7 @@
         {
           "name": "SaveAndLoadMmap",
           "file": "C:\\Users\\dasra\\Desktop\\vector-forge\\tests\\test_storage.cpp",
-          "line": 40
+          "line": 38
         }
       ]
     },
