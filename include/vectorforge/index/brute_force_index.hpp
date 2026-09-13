@@ -11,6 +11,10 @@ namespace vectorforge {
 class BruteForceIndex {
 public:
     BruteForceIndex(size_t dim);
+    BruteForceIndex(const BruteForceIndex& other);
+    BruteForceIndex& operator=(const BruteForceIndex& other);
+    BruteForceIndex(BruteForceIndex&& other) noexcept;
+    BruteForceIndex& operator=(BruteForceIndex&& other) noexcept;
 
     void add(VectorId id, const Vector& vector);
     void build();
