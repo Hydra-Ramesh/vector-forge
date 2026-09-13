@@ -1,8 +1,12 @@
 #pragma once
 
 #include <chrono>
+#include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <vector>
+#include <stdexcept>
+#include <string>
 #include <new>
 #if defined(_WIN32)
 #include <malloc.h>
@@ -37,24 +41,26 @@ namespace vectorforge
                 return nullptr;
             void *ptr = nullptr;
             std::size_t bytes = n * sizeof(T);
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__)
+            ptr = _aligned_malloc(bytes, Alignment);
+#elif defined(__MINGW32__)
             ptr = __mingw_aligned_malloc(bytes, Alignment);
-            if (!ptr)
-                ptr = _aligned_malloc(bytes, Alignment);
-            if (!ptr)
-                throw std::bad_alloc();
 #else
-            if (posix_memalign(&ptr, Alignment, bytes) != 0)
+            if (posix_memalign(&ptr, Alignment, bytes) != 0) {
                 throw std::bad_alloc();
+            }
 #endif
+            if (!ptr)
+                throw std::bad_alloc();
             return static_cast<T *>(ptr);
         }
 
         void deallocate(T *p, std::size_t) noexcept
         {
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(__MINGW32__)
+            _aligned_free(p);
+#elif defined(__MINGW32__)
             __mingw_aligned_free(p);
-            // _aligned_free(p);
 #else
             free(p);
 #endif
