@@ -76,8 +76,8 @@ test/fast: test
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
-	C:\msys64\ucrt64\bin\cmake.exe -E echo "No interactive CMake dialog available."
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
+	"C:\Program Files\CMake\bin\cmake-gui.exe" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -184,6 +184,19 @@ vectorforge_lib/fast:
 .PHONY : vectorforge_lib/fast
 
 #=============================================================================
+# Target rules for targets named vectorforge_cli
+
+# Build rule for target.
+vectorforge_cli: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 vectorforge_cli
+.PHONY : vectorforge_cli
+
+# fast build rule for target.
+vectorforge_cli/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_cli.dir\build.make CMakeFiles/vectorforge_cli.dir/build
+.PHONY : vectorforge_cli/fast
+
+#=============================================================================
 # Target rules for targets named vectorforge
 
 # Build rule for target.
@@ -266,7 +279,7 @@ src/cli/main.obj: src/cli/main.cpp.obj
 
 # target to build an object file
 src/cli/main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge.dir\build.make CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_cli.dir\build.make CMakeFiles/vectorforge_cli.dir/src/cli/main.cpp.obj
 .PHONY : src/cli/main.cpp.obj
 
 src/cli/main.i: src/cli/main.cpp.i
@@ -274,7 +287,7 @@ src/cli/main.i: src/cli/main.cpp.i
 
 # target to preprocess a source file
 src/cli/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge.dir\build.make CMakeFiles/vectorforge.dir/src/cli/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_cli.dir\build.make CMakeFiles/vectorforge_cli.dir/src/cli/main.cpp.i
 .PHONY : src/cli/main.cpp.i
 
 src/cli/main.s: src/cli/main.cpp.s
@@ -282,8 +295,32 @@ src/cli/main.s: src/cli/main.cpp.s
 
 # target to generate assembly for a file
 src/cli/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge.dir\build.make CMakeFiles/vectorforge.dir/src/cli/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_cli.dir\build.make CMakeFiles/vectorforge_cli.dir/src/cli/main.cpp.s
 .PHONY : src/cli/main.cpp.s
+
+src/core/collection_manager.obj: src/core/collection_manager.cpp.obj
+.PHONY : src/core/collection_manager.obj
+
+# target to build an object file
+src/core/collection_manager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.obj
+.PHONY : src/core/collection_manager.cpp.obj
+
+src/core/collection_manager.i: src/core/collection_manager.cpp.i
+.PHONY : src/core/collection_manager.i
+
+# target to preprocess a source file
+src/core/collection_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.i
+.PHONY : src/core/collection_manager.cpp.i
+
+src/core/collection_manager.s: src/core/collection_manager.cpp.s
+.PHONY : src/core/collection_manager.s
+
+# target to generate assembly for a file
+src/core/collection_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.s
+.PHONY : src/core/collection_manager.cpp.s
 
 src/core/dataset.obj: src/core/dataset.cpp.obj
 .PHONY : src/core/dataset.obj
@@ -308,6 +345,30 @@ src/core/dataset.s: src/core/dataset.cpp.s
 src/core/dataset.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/core/dataset.cpp.s
 .PHONY : src/core/dataset.cpp.s
+
+src/core/fvecs_reader.obj: src/core/fvecs_reader.cpp.obj
+.PHONY : src/core/fvecs_reader.obj
+
+# target to build an object file
+src/core/fvecs_reader.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.obj
+.PHONY : src/core/fvecs_reader.cpp.obj
+
+src/core/fvecs_reader.i: src/core/fvecs_reader.cpp.i
+.PHONY : src/core/fvecs_reader.i
+
+# target to preprocess a source file
+src/core/fvecs_reader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.i
+.PHONY : src/core/fvecs_reader.cpp.i
+
+src/core/fvecs_reader.s: src/core/fvecs_reader.cpp.s
+.PHONY : src/core/fvecs_reader.s
+
+# target to generate assembly for a file
+src/core/fvecs_reader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.s
+.PHONY : src/core/fvecs_reader.cpp.s
 
 src/core/math.obj: src/core/math.cpp.obj
 .PHONY : src/core/math.obj
@@ -429,6 +490,30 @@ src/index/brute_force_index.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.s
 .PHONY : src/index/brute_force_index.cpp.s
 
+src/index/delta_index.obj: src/index/delta_index.cpp.obj
+.PHONY : src/index/delta_index.obj
+
+# target to build an object file
+src/index/delta_index.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.obj
+.PHONY : src/index/delta_index.cpp.obj
+
+src/index/delta_index.i: src/index/delta_index.cpp.i
+.PHONY : src/index/delta_index.i
+
+# target to preprocess a source file
+src/index/delta_index.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.i
+.PHONY : src/index/delta_index.cpp.i
+
+src/index/delta_index.s: src/index/delta_index.cpp.s
+.PHONY : src/index/delta_index.s
+
+# target to generate assembly for a file
+src/index/delta_index.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.s
+.PHONY : src/index/delta_index.cpp.s
+
 src/index/hnsw_index.obj: src/index/hnsw_index.cpp.obj
 .PHONY : src/index/hnsw_index.obj
 
@@ -452,6 +537,30 @@ src/index/hnsw_index.s: src/index/hnsw_index.cpp.s
 src/index/hnsw_index.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.s
 .PHONY : src/index/hnsw_index.cpp.s
+
+src/index/hybrid_index.obj: src/index/hybrid_index.cpp.obj
+.PHONY : src/index/hybrid_index.obj
+
+# target to build an object file
+src/index/hybrid_index.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.obj
+.PHONY : src/index/hybrid_index.cpp.obj
+
+src/index/hybrid_index.i: src/index/hybrid_index.cpp.i
+.PHONY : src/index/hybrid_index.i
+
+# target to preprocess a source file
+src/index/hybrid_index.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.i
+.PHONY : src/index/hybrid_index.cpp.i
+
+src/index/hybrid_index.s: src/index/hybrid_index.cpp.s
+.PHONY : src/index/hybrid_index.s
+
+# target to generate assembly for a file
+src/index/hybrid_index.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.s
+.PHONY : src/index/hybrid_index.cpp.s
 
 src/index/ivf_index.obj: src/index/ivf_index.cpp.obj
 .PHONY : src/index/ivf_index.obj
@@ -501,6 +610,54 @@ src/index/ivfpq_index.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.s
 .PHONY : src/index/ivfpq_index.cpp.s
 
+src/index/quantized_vamana_index.obj: src/index/quantized_vamana_index.cpp.obj
+.PHONY : src/index/quantized_vamana_index.obj
+
+# target to build an object file
+src/index/quantized_vamana_index.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.obj
+.PHONY : src/index/quantized_vamana_index.cpp.obj
+
+src/index/quantized_vamana_index.i: src/index/quantized_vamana_index.cpp.i
+.PHONY : src/index/quantized_vamana_index.i
+
+# target to preprocess a source file
+src/index/quantized_vamana_index.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.i
+.PHONY : src/index/quantized_vamana_index.cpp.i
+
+src/index/quantized_vamana_index.s: src/index/quantized_vamana_index.cpp.s
+.PHONY : src/index/quantized_vamana_index.s
+
+# target to generate assembly for a file
+src/index/quantized_vamana_index.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.s
+.PHONY : src/index/quantized_vamana_index.cpp.s
+
+src/index/sparse_index.obj: src/index/sparse_index.cpp.obj
+.PHONY : src/index/sparse_index.obj
+
+# target to build an object file
+src/index/sparse_index.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.obj
+.PHONY : src/index/sparse_index.cpp.obj
+
+src/index/sparse_index.i: src/index/sparse_index.cpp.i
+.PHONY : src/index/sparse_index.i
+
+# target to preprocess a source file
+src/index/sparse_index.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.i
+.PHONY : src/index/sparse_index.cpp.i
+
+src/index/sparse_index.s: src/index/sparse_index.cpp.s
+.PHONY : src/index/sparse_index.s
+
+# target to generate assembly for a file
+src/index/sparse_index.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.s
+.PHONY : src/index/sparse_index.cpp.s
+
 src/index/vamana_index.obj: src/index/vamana_index.cpp.obj
 .PHONY : src/index/vamana_index.obj
 
@@ -525,6 +682,30 @@ src/index/vamana_index.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge_lib.dir\build.make CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.s
 .PHONY : src/index/vamana_index.cpp.s
 
+src/python/bindings.obj: src/python/bindings.cpp.obj
+.PHONY : src/python/bindings.obj
+
+# target to build an object file
+src/python/bindings.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge.dir\build.make CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj
+.PHONY : src/python/bindings.cpp.obj
+
+src/python/bindings.i: src/python/bindings.cpp.i
+.PHONY : src/python/bindings.i
+
+# target to preprocess a source file
+src/python/bindings.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge.dir\build.make CMakeFiles/vectorforge.dir/src/python/bindings.cpp.i
+.PHONY : src/python/bindings.cpp.i
+
+src/python/bindings.s: src/python/bindings.cpp.s
+.PHONY : src/python/bindings.s
+
+# target to generate assembly for a file
+src/python/bindings.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\vectorforge.dir\build.make CMakeFiles/vectorforge.dir/src/python/bindings.cpp.s
+.PHONY : src/python/bindings.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -543,14 +724,21 @@ help:
 	@echo ... gtest
 	@echo ... gtest_main
 	@echo ... vectorforge
+	@echo ... vectorforge_cli
 	@echo ... vectorforge_lib
 	@echo ... vectorforge_tests
 	@echo ... src/cli/main.obj
 	@echo ... src/cli/main.i
 	@echo ... src/cli/main.s
+	@echo ... src/core/collection_manager.obj
+	@echo ... src/core/collection_manager.i
+	@echo ... src/core/collection_manager.s
 	@echo ... src/core/dataset.obj
 	@echo ... src/core/dataset.i
 	@echo ... src/core/dataset.s
+	@echo ... src/core/fvecs_reader.obj
+	@echo ... src/core/fvecs_reader.i
+	@echo ... src/core/fvecs_reader.s
 	@echo ... src/core/math.obj
 	@echo ... src/core/math.i
 	@echo ... src/core/math.s
@@ -566,18 +754,33 @@ help:
 	@echo ... src/index/brute_force_index.obj
 	@echo ... src/index/brute_force_index.i
 	@echo ... src/index/brute_force_index.s
+	@echo ... src/index/delta_index.obj
+	@echo ... src/index/delta_index.i
+	@echo ... src/index/delta_index.s
 	@echo ... src/index/hnsw_index.obj
 	@echo ... src/index/hnsw_index.i
 	@echo ... src/index/hnsw_index.s
+	@echo ... src/index/hybrid_index.obj
+	@echo ... src/index/hybrid_index.i
+	@echo ... src/index/hybrid_index.s
 	@echo ... src/index/ivf_index.obj
 	@echo ... src/index/ivf_index.i
 	@echo ... src/index/ivf_index.s
 	@echo ... src/index/ivfpq_index.obj
 	@echo ... src/index/ivfpq_index.i
 	@echo ... src/index/ivfpq_index.s
+	@echo ... src/index/quantized_vamana_index.obj
+	@echo ... src/index/quantized_vamana_index.i
+	@echo ... src/index/quantized_vamana_index.s
+	@echo ... src/index/sparse_index.obj
+	@echo ... src/index/sparse_index.i
+	@echo ... src/index/sparse_index.s
 	@echo ... src/index/vamana_index.obj
 	@echo ... src/index/vamana_index.i
 	@echo ... src/index/vamana_index.s
+	@echo ... src/python/bindings.obj
+	@echo ... src/python/bindings.i
+	@echo ... src/python/bindings.s
 .PHONY : help
 
 
