@@ -146,11 +146,41 @@ CMakeFiles/vectorforge_lib.dir/src/core/mmap_reader.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_lib.dir/src/core/mmap_reader.cpp.s"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\core\mmap_reader.cpp -o CMakeFiles\vectorforge_lib.dir\src\core\mmap_reader.cpp.s
 
+CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.obj: CMakeFiles/vectorforge_lib.dir/flags.make
+CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
+CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/core/fvecs_reader.cpp
+CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\core\fvecs_reader.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\core\fvecs_reader.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\core\fvecs_reader.cpp
+
+CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\dasra\Desktop\vector-forge\src\core\fvecs_reader.cpp > CMakeFiles\vectorforge_lib.dir\src\core\fvecs_reader.cpp.i
+
+CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\core\fvecs_reader.cpp -o CMakeFiles\vectorforge_lib.dir\src\core\fvecs_reader.cpp.s
+
+CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.obj: CMakeFiles/vectorforge_lib.dir/flags.make
+CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
+CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/core/collection_manager.cpp
+CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\core\collection_manager.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\core\collection_manager.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\core\collection_manager.cpp
+
+CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\dasra\Desktop\vector-forge\src\core\collection_manager.cpp > CMakeFiles\vectorforge_lib.dir\src\core\collection_manager.cpp.i
+
+CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\core\collection_manager.cpp -o CMakeFiles\vectorforge_lib.dir\src\core\collection_manager.cpp.s
+
 CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/flags.make
 CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
 CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/index/brute_force_index.cpp
 CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\index\brute_force_index.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\index\brute_force_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\index\brute_force_index.cpp
 
 CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.i: cmake_force
@@ -165,7 +195,7 @@ CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.obj: CMakeFiles/vectorfor
 CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
 CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/index/ivf_index.cpp
 CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\index\ivf_index.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\index\ivf_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\index\ivf_index.cpp
 
 CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.i: cmake_force
@@ -180,7 +210,7 @@ CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.obj: CMakeFiles/vectorf
 CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
 CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/index/ivfpq_index.cpp
 CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\index\ivfpq_index.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\index\ivfpq_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\index\ivfpq_index.cpp
 
 CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.i: cmake_force
@@ -195,7 +225,7 @@ CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj: CMakeFiles/vectorfo
 CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
 CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/index/hnsw_index.cpp
 CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\index\hnsw_index.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\index\hnsw_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\index\hnsw_index.cpp
 
 CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.i: cmake_force
@@ -210,7 +240,7 @@ CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj: CMakeFiles/vector
 CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
 CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/index/vamana_index.cpp
 CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\index\vamana_index.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\index\vamana_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\index\vamana_index.cpp
 
 CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.i: cmake_force
@@ -221,6 +251,66 @@ CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.s"
 	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\index\vamana_index.cpp -o CMakeFiles\vectorforge_lib.dir\src\index\vamana_index.cpp.s
 
+CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/flags.make
+CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
+CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/index/quantized_vamana_index.cpp
+CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\index\quantized_vamana_index.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\index\quantized_vamana_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\index\quantized_vamana_index.cpp
+
+CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\dasra\Desktop\vector-forge\src\index\quantized_vamana_index.cpp > CMakeFiles\vectorforge_lib.dir\src\index\quantized_vamana_index.cpp.i
+
+CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\index\quantized_vamana_index.cpp -o CMakeFiles\vectorforge_lib.dir\src\index\quantized_vamana_index.cpp.s
+
+CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/flags.make
+CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
+CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/index/delta_index.cpp
+CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\index\delta_index.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\index\delta_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\index\delta_index.cpp
+
+CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\dasra\Desktop\vector-forge\src\index\delta_index.cpp > CMakeFiles\vectorforge_lib.dir\src\index\delta_index.cpp.i
+
+CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\index\delta_index.cpp -o CMakeFiles\vectorforge_lib.dir\src\index\delta_index.cpp.s
+
+CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/flags.make
+CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
+CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/index/sparse_index.cpp
+CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\index\sparse_index.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\index\sparse_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\index\sparse_index.cpp
+
+CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\dasra\Desktop\vector-forge\src\index\sparse_index.cpp > CMakeFiles\vectorforge_lib.dir\src\index\sparse_index.cpp.i
+
+CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\index\sparse_index.cpp -o CMakeFiles\vectorforge_lib.dir\src\index\sparse_index.cpp.s
+
+CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/flags.make
+CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/includes_CXX.rsp
+CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/index/hybrid_index.cpp
+CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.obj: CMakeFiles/vectorforge_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.obj -MF CMakeFiles\vectorforge_lib.dir\src\index\hybrid_index.cpp.obj.d -o CMakeFiles\vectorforge_lib.dir\src\index\hybrid_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\index\hybrid_index.cpp
+
+CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\dasra\Desktop\vector-forge\src\index\hybrid_index.cpp > CMakeFiles\vectorforge_lib.dir\src\index\hybrid_index.cpp.i
+
+CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\index\hybrid_index.cpp -o CMakeFiles\vectorforge_lib.dir\src\index\hybrid_index.cpp.s
+
 # Object files for target vectorforge_lib
 vectorforge_lib_OBJECTS = \
 "CMakeFiles/vectorforge_lib.dir/src/core/math.cpp.obj" \
@@ -228,11 +318,17 @@ vectorforge_lib_OBJECTS = \
 "CMakeFiles/vectorforge_lib.dir/src/core/sys_utils.cpp.obj" \
 "CMakeFiles/vectorforge_lib.dir/src/core/dataset.cpp.obj" \
 "CMakeFiles/vectorforge_lib.dir/src/core/mmap_reader.cpp.obj" \
+"CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.obj" \
+"CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.obj" \
 "CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.obj" \
 "CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.obj" \
 "CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.obj" \
 "CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj" \
-"CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj"
+"CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj" \
+"CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.obj" \
+"CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.obj" \
+"CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.obj" \
+"CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.obj"
 
 # External object files for target vectorforge_lib
 vectorforge_lib_EXTERNAL_OBJECTS =
@@ -242,14 +338,20 @@ libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/core/pq.cpp.obj
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/core/sys_utils.cpp.obj
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/core/dataset.cpp.obj
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/core/mmap_reader.cpp.obj
+libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/core/fvecs_reader.cpp.obj
+libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/core/collection_manager.cpp.obj
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/index/brute_force_index.cpp.obj
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/index/ivf_index.cpp.obj
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/index/ivfpq_index.cpp.obj
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/index/hnsw_index.cpp.obj
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/index/vamana_index.cpp.obj
+libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/index/quantized_vamana_index.cpp.obj
+libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/index/delta_index.cpp.obj
+libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/index/sparse_index.cpp.obj
+libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/src/index/hybrid_index.cpp.obj
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/build.make
 libvectorforge_lib.a: CMakeFiles/vectorforge_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX static library libvectorforge_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Linking CXX static library libvectorforge_lib.a"
 	$(CMAKE_COMMAND) -P CMakeFiles\vectorforge_lib.dir\cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\vectorforge_lib.dir\link.txt --verbose=$(VERBOSE)
 
