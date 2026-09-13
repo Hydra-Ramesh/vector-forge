@@ -13,6 +13,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/dasra/Desktop/vector-forge/tests/test_ivf_index.cpp" "tests/CMakeFiles/vectorforge_tests.dir/test_ivf_index.cpp.obj" "gcc" "tests/CMakeFiles/vectorforge_tests.dir/test_ivf_index.cpp.obj.d"
   "C:/Users/dasra/Desktop/vector-forge/tests/test_ivfpq_index.cpp" "tests/CMakeFiles/vectorforge_tests.dir/test_ivfpq_index.cpp.obj" "gcc" "tests/CMakeFiles/vectorforge_tests.dir/test_ivfpq_index.cpp.obj.d"
   "C:/Users/dasra/Desktop/vector-forge/tests/test_storage.cpp" "tests/CMakeFiles/vectorforge_tests.dir/test_storage.cpp.obj" "gcc" "tests/CMakeFiles/vectorforge_tests.dir/test_storage.cpp.obj.d"
+  "C:/Users/dasra/Desktop/vector-forge/tests/test_vamana_index.cpp" "tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj" "gcc" "tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
