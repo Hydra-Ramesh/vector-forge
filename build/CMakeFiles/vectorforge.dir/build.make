@@ -71,41 +71,43 @@ include CMakeFiles/vectorforge.dir/flags.make
 CMakeFiles/vectorforge.dir/codegen:
 .PHONY : CMakeFiles/vectorforge.dir/codegen
 
-CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj: CMakeFiles/vectorforge.dir/flags.make
-CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj: CMakeFiles/vectorforge.dir/includes_CXX.rsp
-CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/cli/main.cpp
-CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj: CMakeFiles/vectorforge.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj"
-	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj -MF CMakeFiles\vectorforge.dir\src\cli\main.cpp.obj.d -o CMakeFiles\vectorforge.dir\src\cli\main.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\cli\main.cpp
+CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj: CMakeFiles/vectorforge.dir/flags.make
+CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj: CMakeFiles/vectorforge.dir/includes_CXX.rsp
+CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj: C:/Users/dasra/Desktop/vector-forge/src/python/bindings.cpp
+CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj: CMakeFiles/vectorforge.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj -MF CMakeFiles\vectorforge.dir\src\python\bindings.cpp.obj.d -o CMakeFiles\vectorforge.dir\src\python\bindings.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\src\python\bindings.cpp
 
-CMakeFiles/vectorforge.dir/src/cli/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/vectorforge.dir/src/cli/main.cpp.i"
-	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\dasra\Desktop\vector-forge\src\cli\main.cpp > CMakeFiles\vectorforge.dir\src\cli\main.cpp.i
+CMakeFiles/vectorforge.dir/src/python/bindings.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/vectorforge.dir/src/python/bindings.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\dasra\Desktop\vector-forge\src\python\bindings.cpp > CMakeFiles\vectorforge.dir\src\python\bindings.cpp.i
 
-CMakeFiles/vectorforge.dir/src/cli/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge.dir/src/cli/main.cpp.s"
-	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\cli\main.cpp -o CMakeFiles\vectorforge.dir\src\cli\main.cpp.s
+CMakeFiles/vectorforge.dir/src/python/bindings.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge.dir/src/python/bindings.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\src\python\bindings.cpp -o CMakeFiles\vectorforge.dir\src\python\bindings.cpp.s
 
 # Object files for target vectorforge
 vectorforge_OBJECTS = \
-"CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj"
+"CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj"
 
 # External object files for target vectorforge
 vectorforge_EXTERNAL_OBJECTS =
 
-vectorforge.exe: CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj
-vectorforge.exe: CMakeFiles/vectorforge.dir/build.make
-vectorforge.exe: libvectorforge_lib.a
-vectorforge.exe: C:/msys64/ucrt64/lib/libgomp.dll.a
-vectorforge.exe: C:/msys64/ucrt64/lib/libmingwthrd.a
-vectorforge.exe: CMakeFiles/vectorforge.dir/linkLibs.rsp
-vectorforge.exe: CMakeFiles/vectorforge.dir/objects1.rsp
-vectorforge.exe: CMakeFiles/vectorforge.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable vectorforge.exe"
+vectorforge.cp313-win_amd64.pyd: CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj
+vectorforge.cp313-win_amd64.pyd: CMakeFiles/vectorforge.dir/build.make
+vectorforge.cp313-win_amd64.pyd: libvectorforge_lib.a
+vectorforge.cp313-win_amd64.pyd: C:/Program\ Files/WindowsApps/PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0/libs/python313.lib
+vectorforge.cp313-win_amd64.pyd: C:/msys64/ucrt64/lib/libgomp.dll.a
+vectorforge.cp313-win_amd64.pyd: C:/msys64/ucrt64/lib/libmingwthrd.a
+vectorforge.cp313-win_amd64.pyd: CMakeFiles/vectorforge.dir/linkLibs.rsp
+vectorforge.cp313-win_amd64.pyd: CMakeFiles/vectorforge.dir/objects1.rsp
+vectorforge.cp313-win_amd64.pyd: CMakeFiles/vectorforge.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared module vectorforge.cp313-win_amd64.pyd"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\vectorforge.dir\link.txt --verbose=$(VERBOSE)
+	C:\msys64\ucrt64\bin\strip.exe C:/Users/dasra/Desktop/vector-forge/build/vectorforge.cp313-win_amd64.pyd
 
 # Rule to build all files generated by this target.
-CMakeFiles/vectorforge.dir/build: vectorforge.exe
+CMakeFiles/vectorforge.dir/build: vectorforge.cp313-win_amd64.pyd
 .PHONY : CMakeFiles/vectorforge.dir/build
 
 CMakeFiles/vectorforge.dir/clean:
