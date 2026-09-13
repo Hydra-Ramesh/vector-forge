@@ -7,6 +7,7 @@
 #include "vectorforge/index/hnsw_index.hpp"
 #include "vectorforge/index/vamana_index.hpp"
 #include "vectorforge/core/sys_utils.hpp"
+#include "vectorforge/core/fvecs_reader.hpp"
 #include <chrono>
 
 using namespace vectorforge;
@@ -204,6 +205,60 @@ int main(int argc, char** argv) {
         double total_time_ms = t.elapsed_ms();
         
         std::cout << "\n=== Vamana (DiskANN) Benchmark Results ===\n";
+        std::cout << "Total search time: " << total_time_ms << " ms\n";
+        std::cout << "Throughput (QPS) : " << (num_queries / (total_time_ms / 1000.0)) << " req/s\n";
+        std::cout << "Average latency  : " << (total_time_ms / num_queries) << " ms/query\n";
+    } else if (command == "benchmark-fvecs") {
+        if (argc < 4) {
+            std::cerr << "Usage: vectorforge benchmark-fvecs <dataset.fvecs> <queries.fvecs>\n";
+            return 1;
+        }
+        std::string dataset_path = argv[2];
+        std::string queries_path = argv[3];
+        
+        std::cout << "Loading dataset from " << dataset_path << "...\n";
+        size_t dim;
+        auto data = FvecsReader::read(dataset_path, dim);
+        size_t num_vectors = data.size();
+        
+        std::cout << "Loading queries from " << queries_path << "...\n";
+        size_t query_dim;
+        auto query_data = FvecsReader::read(queries_path, query_dim);
+        size_t num_queries = query_data.size();
+        
+        if (dim != query_dim) {
+            std::cerr << "Dimension mismatch between dataset and queries!\n";
+            return 1;
+        }
+
+        std::cout << "Dataset: " << num_vectors << " vectors, Queries: " << num_queries << ", Dim: " << dim << "\n";
+        
+        size_t R = 64;
+        size_t L = 100;
+        float alpha = 1.2f;
+
+        std::cout << "Building Vamana Graph (R=" << R << ", L=" << L << ", alpha=" << alpha << ")...\n";
+        Timer t;
+        VamanaIndex index(dim, R, L, alpha);
+        
+        for (size_t vector_index = 0; vector_index < num_vectors; ++vector_index) {
+            index.add(vector_index, data[vector_index]);
+        }
+        index.build();
+        std::cout << "Build took " << t.elapsed_ms() << " ms\n";
+
+        std::cout << "\nRunning benchmark search...\n";
+        SearchOptions opts;
+        opts.top_k = 10;
+        opts.metric = Metric::L2;
+
+        t.reset();
+        for (size_t query_index = 0; query_index < num_queries; ++query_index) {
+            index.search(query_data[query_index], opts);
+        }
+        double total_time_ms = t.elapsed_ms();
+        
+        std::cout << "\n=== Fvecs Benchmark Results ===\n";
         std::cout << "Total search time: " << total_time_ms << " ms\n";
         std::cout << "Throughput (QPS) : " << (num_queries / (total_time_ms / 1000.0)) << " req/s\n";
         std::cout << "Average latency  : " << (total_time_ms / num_queries) << " ms/query\n";
