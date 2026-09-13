@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/dasra/Desktop/vector-forge/src/cli/main.cpp" "CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj" "gcc" "CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj.d"
+  "C:/Users/dasra/Desktop/vector-forge/src/python/bindings.cpp" "CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj" "gcc" "CMakeFiles/vectorforge.dir/src/python/bindings.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
