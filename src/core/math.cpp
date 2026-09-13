@@ -1,6 +1,8 @@
 #include <omp.h>
-#if defined(__AVX2__)
+#if defined(__x86_64__) || defined(_M_X64) || defined(__i386) || defined(_M_IX86)
 #include <immintrin.h>
+#elif defined(__ARM_NEON)
+#include <arm_neon.h>
 #endif
 #include "vectorforge/core/math.hpp"
 #include <cmath>
@@ -11,10 +13,13 @@
 
 namespace vectorforge {
 
-float compute_distance(const float* left_vector, const float* right_vector, size_t dimension, Metric metric) {
+#if defined(__x86_64__) || defined(_M_X64) || defined(__i386) || defined(_M_IX86)
+#ifndef _MSC_VER
+__attribute__((target("avx2,fma")))
+#endif
+inline float compute_distance_avx2(const float* left_vector, const float* right_vector, size_t dimension, Metric metric) {
     float distance = 0.0f;
     if (metric == Metric::L2) {
-#if defined(__AVX2__) && defined(__FMA__)
         __m256 sum_squared_differences = _mm256_setzero_ps();
         size_t dimension_index = 0;
         for (; dimension_index + 7 < dimension; dimension_index += 8) {
@@ -32,18 +37,10 @@ float compute_distance(const float* left_vector, const float* right_vector, size
             float difference = left_vector[dimension_index] - right_vector[dimension_index];
             distance += difference * difference;
         }
-#else
-        #pragma omp simd reduction(+:distance)
-        for (size_t dimension_index = 0; dimension_index < dimension; ++dimension_index) {
-            float difference = left_vector[dimension_index] - right_vector[dimension_index];
-            distance += difference * difference;
-        }
-#endif
     } else if (metric == Metric::Cosine) {
         float dot_product = 0.0f;
         float left_norm_squared = 0.0f;
         float right_norm_squared = 0.0f;
-#if defined(__AVX2__) && defined(__FMA__)
         __m256 dot_product_sum = _mm256_setzero_ps();
         __m256 left_norm_sum = _mm256_setzero_ps();
         __m256 right_norm_sum = _mm256_setzero_ps();
@@ -69,14 +66,6 @@ float compute_distance(const float* left_vector, const float* right_vector, size
             left_norm_squared += left_vector[dimension_index] * left_vector[dimension_index];
             right_norm_squared += right_vector[dimension_index] * right_vector[dimension_index];
         }
-#else
-        #pragma omp simd reduction(+:dot_product, left_norm_squared, right_norm_squared)
-        for (size_t dimension_index = 0; dimension_index < dimension; ++dimension_index) {
-            dot_product += left_vector[dimension_index] * right_vector[dimension_index];
-            left_norm_squared += left_vector[dimension_index] * left_vector[dimension_index];
-            right_norm_squared += right_vector[dimension_index] * right_vector[dimension_index];
-        }
-#endif
         if (left_norm_squared == 0.0f || right_norm_squared == 0.0f) {
             distance = 1.0f;
         } else {
@@ -84,6 +73,122 @@ float compute_distance(const float* left_vector, const float* right_vector, size
         }
     }
     return distance;
+}
+#endif
+
+#if defined(__ARM_NEON)
+inline float compute_distance_neon(const float* left_vector, const float* right_vector, size_t dimension, Metric metric) {
+    float distance = 0.0f;
+    if (metric == Metric::L2) {
+        float32x4_t sum_squared_differences = vdupq_n_f32(0.0f);
+        size_t dimension_index = 0;
+        for (; dimension_index + 3 < dimension; dimension_index += 4) {
+            float32x4_t left_values = vld1q_f32(left_vector + dimension_index);
+            float32x4_t right_values = vld1q_f32(right_vector + dimension_index);
+            float32x4_t difference = vsubq_f32(left_values, right_values);
+            sum_squared_differences = vmlaq_f32(sum_squared_differences, difference, difference);
+        }
+        float lane_sums[4];
+        vst1q_f32(lane_sums, sum_squared_differences);
+        for (int lane_index = 0; lane_index < 4; ++lane_index) {
+            distance += lane_sums[lane_index];
+        }
+        for (; dimension_index < dimension; ++dimension_index) {
+            float difference = left_vector[dimension_index] - right_vector[dimension_index];
+            distance += difference * difference;
+        }
+    } else if (metric == Metric::Cosine) {
+        float dot_product = 0.0f;
+        float left_norm_squared = 0.0f;
+        float right_norm_squared = 0.0f;
+        float32x4_t dot_product_sum = vdupq_n_f32(0.0f);
+        float32x4_t left_norm_sum = vdupq_n_f32(0.0f);
+        float32x4_t right_norm_sum = vdupq_n_f32(0.0f);
+        size_t dimension_index = 0;
+        for (; dimension_index + 3 < dimension; dimension_index += 4) {
+            float32x4_t left_values = vld1q_f32(left_vector + dimension_index);
+            float32x4_t right_values = vld1q_f32(right_vector + dimension_index);
+            dot_product_sum = vmlaq_f32(dot_product_sum, left_values, right_values);
+            left_norm_sum = vmlaq_f32(left_norm_sum, left_values, left_values);
+            right_norm_sum = vmlaq_f32(right_norm_sum, right_values, right_values);
+        }
+        float dot_product_lanes[4], left_norm_lanes[4], right_norm_lanes[4];
+        vst1q_f32(dot_product_lanes, dot_product_sum);
+        vst1q_f32(left_norm_lanes, left_norm_sum);
+        vst1q_f32(right_norm_lanes, right_norm_sum);
+        for (int lane_index = 0; lane_index < 4; ++lane_index) {
+            dot_product += dot_product_lanes[lane_index];
+            left_norm_squared += left_norm_lanes[lane_index];
+            right_norm_squared += right_norm_lanes[lane_index];
+        }
+        for (; dimension_index < dimension; ++dimension_index) {
+            dot_product += left_vector[dimension_index] * right_vector[dimension_index];
+            left_norm_squared += left_vector[dimension_index] * left_vector[dimension_index];
+            right_norm_squared += right_vector[dimension_index] * right_vector[dimension_index];
+        }
+        if (left_norm_squared == 0.0f || right_norm_squared == 0.0f) {
+            distance = 1.0f;
+        } else {
+            distance = 1.0f - (dot_product / (std::sqrt(left_norm_squared) * std::sqrt(right_norm_squared)));
+        }
+    }
+    return distance;
+}
+#endif
+
+inline float compute_distance_scalar(const float* left_vector, const float* right_vector, size_t dimension, Metric metric) {
+    float distance = 0.0f;
+    if (metric == Metric::L2) {
+        #pragma omp simd reduction(+:distance)
+        for (size_t dimension_index = 0; dimension_index < dimension; ++dimension_index) {
+            float difference = left_vector[dimension_index] - right_vector[dimension_index];
+            distance += difference * difference;
+        }
+    } else if (metric == Metric::Cosine) {
+        float dot_product = 0.0f;
+        float left_norm_squared = 0.0f;
+        float right_norm_squared = 0.0f;
+        #pragma omp simd reduction(+:dot_product, left_norm_squared, right_norm_squared)
+        for (size_t dimension_index = 0; dimension_index < dimension; ++dimension_index) {
+            dot_product += left_vector[dimension_index] * right_vector[dimension_index];
+            left_norm_squared += left_vector[dimension_index] * left_vector[dimension_index];
+            right_norm_squared += right_vector[dimension_index] * right_vector[dimension_index];
+        }
+        if (left_norm_squared == 0.0f || right_norm_squared == 0.0f) {
+            distance = 1.0f;
+        } else {
+            distance = 1.0f - (dot_product / (std::sqrt(left_norm_squared) * std::sqrt(right_norm_squared)));
+        }
+    }
+    return distance;
+}
+
+DistanceFunction get_distance_function() {
+#if defined(__x86_64__) || defined(_M_X64) || defined(__i386) || defined(_M_IX86)
+#if defined(_MSC_VER)
+    return compute_distance_avx2; // On MSVC, assume AVX2 if compiled with /arch:AVX2
+#else
+    if (__builtin_cpu_supports("avx2")) {
+        return compute_distance_avx2;
+    }
+#endif
+#elif defined(__ARM_NEON)
+    return compute_distance_neon;
+#endif
+    return compute_distance_scalar;
+}
+
+float compute_distance(const float* a, const float* b, size_t dim, Metric metric) {
+    static DistanceFunction func = get_distance_function();
+    return func(a, b, dim, metric);
+}
+
+float compute_distance(const std::vector<float>& a, const std::vector<float>& b, size_t dim, Metric metric) {
+    return compute_distance(a.data(), b.data(), dim, metric);
+}
+
+float compute_distance(const float* a, const std::vector<float>& b, size_t dim, Metric metric) {
+    return compute_distance(a, b.data(), dim, metric);
 }
 
 std::vector<float> train_kmeans(const float* data, size_t vector_count, size_t dimension, size_t cluster_count, Metric metric, int max_iterations) {
@@ -117,7 +222,7 @@ std::vector<float> train_kmeans(const float* data, size_t vector_count, size_t d
         int changed_assignments = 0;
 
         // Assign points to nearest centroid
-        #pragma omp parallel for reduction(+:changed)
+        #pragma omp parallel for reduction(+:changed_assignments)
         for (int64_t vector_index = 0; vector_index < static_cast<int64_t>(vector_count); ++vector_index) {
             float nearest_distance = std::numeric_limits<float>::max();
             size_t nearest_centroid = 0;
