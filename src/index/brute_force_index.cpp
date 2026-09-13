@@ -27,6 +27,74 @@ BruteForceIndex::BruteForceIndex(size_t dim) : dim_(dim), num_vectors_(0), activ
     }
 }
 
+BruteForceIndex::BruteForceIndex(const BruteForceIndex& other) 
+    : dim_(other.dim_), num_vectors_(other.num_vectors_),
+      owned_ids_(other.owned_ids_), owned_vectors_(other.owned_vectors_) {
+    if (num_vectors_ > 0) {
+        active_ids_ = owned_ids_.data();
+        active_vectors_ = owned_vectors_.data();
+    } else {
+        active_ids_ = nullptr;
+        active_vectors_ = nullptr;
+    }
+    // Note: We don't copy mmap_reader_
+}
+
+BruteForceIndex& BruteForceIndex::operator=(const BruteForceIndex& other) {
+    if (this != &other) {
+        dim_ = other.dim_;
+        num_vectors_ = other.num_vectors_;
+        owned_ids_ = other.owned_ids_;
+        owned_vectors_ = other.owned_vectors_;
+        if (num_vectors_ > 0) {
+            active_ids_ = owned_ids_.data();
+            active_vectors_ = owned_vectors_.data();
+        } else {
+            active_ids_ = nullptr;
+            active_vectors_ = nullptr;
+        }
+        mmap_reader_.reset();
+    }
+    return *this;
+}
+
+BruteForceIndex::BruteForceIndex(BruteForceIndex&& other) noexcept
+    : dim_(other.dim_), num_vectors_(other.num_vectors_),
+      owned_ids_(std::move(other.owned_ids_)), owned_vectors_(std::move(other.owned_vectors_)),
+      mmap_reader_(std::move(other.mmap_reader_)) {
+    if (num_vectors_ > 0) {
+        active_ids_ = owned_ids_.data();
+        active_vectors_ = owned_vectors_.data();
+    } else {
+        active_ids_ = nullptr;
+        active_vectors_ = nullptr;
+    }
+    other.num_vectors_ = 0;
+    other.active_ids_ = nullptr;
+    other.active_vectors_ = nullptr;
+}
+
+BruteForceIndex& BruteForceIndex::operator=(BruteForceIndex&& other) noexcept {
+    if (this != &other) {
+        dim_ = other.dim_;
+        num_vectors_ = other.num_vectors_;
+        owned_ids_ = std::move(other.owned_ids_);
+        owned_vectors_ = std::move(other.owned_vectors_);
+        mmap_reader_ = std::move(other.mmap_reader_);
+        if (num_vectors_ > 0) {
+            active_ids_ = owned_ids_.data();
+            active_vectors_ = owned_vectors_.data();
+        } else {
+            active_ids_ = nullptr;
+            active_vectors_ = nullptr;
+        }
+        other.num_vectors_ = 0;
+        other.active_ids_ = nullptr;
+        other.active_vectors_ = nullptr;
+    }
+    return *this;
+}
+
 void BruteForceIndex::add(VectorId id, const Vector& vector) {
     if (mmap_reader_ && mmap_reader_->is_open()) {
         throw std::runtime_error("Cannot add to a memory-mapped index. Load normally instead.");
