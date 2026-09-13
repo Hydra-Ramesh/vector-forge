@@ -224,6 +224,12 @@ CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj: \
  C:/msys64/ucrt64/include/c++/16.1.0/bits/stl_heap.h \
  C:/msys64/ucrt64/include/c++/16.1.0/bits/stl_queue.h \
  C:/Users/dasra/Desktop/vector-forge/include/vectorforge/index/vamana_index.hpp \
+ C:/msys64/ucrt64/include/c++/16.1.0/unordered_map \
+ C:/msys64/ucrt64/include/c++/16.1.0/bits/unordered_map.h \
+ C:/msys64/ucrt64/include/c++/16.1.0/bits/hashtable.h \
+ C:/msys64/ucrt64/include/c++/16.1.0/bits/hashtable_policy.h \
+ C:/msys64/ucrt64/include/c++/16.1.0/bits/enable_special_members.h \
+ C:/msys64/ucrt64/include/c++/16.1.0/bits/node_handle.h \
  C:/Users/dasra/Desktop/vector-forge/include/vectorforge/core/sys_utils.hpp \
  C:/msys64/ucrt64/include/c++/16.1.0/chrono \
  C:/msys64/ucrt64/include/c++/16.1.0/bits/chrono.h \
@@ -246,9 +252,9 @@ CMakeFiles/vectorforge.dir/src/cli/main.cpp.obj: \
  C:/msys64/ucrt64/include/c++/16.1.0/bits/locale_facets_nonio.tcc \
  C:/msys64/ucrt64/include/c++/16.1.0/bits/locale_conv.h \
  C:/msys64/ucrt64/include/c++/16.1.0/optional \
- C:/msys64/ucrt64/include/c++/16.1.0/bits/enable_special_members.h \
  C:/msys64/ucrt64/include/c++/16.1.0/span \
  C:/msys64/ucrt64/include/c++/16.1.0/bits/monostate.h \
  C:/msys64/ucrt64/include/c++/16.1.0/bits/formatfwd.h \
  C:/msys64/ucrt64/include/c++/16.1.0/bits/unicode.h \
- C:/msys64/ucrt64/include/c++/16.1.0/bits/unicode-data.h
+ C:/msys64/ucrt64/include/c++/16.1.0/bits/unicode-data.h \
+ C:/Users/dasra/Desktop/vector-forge/include/vectorforge/core/fvecs_reader.hpp
