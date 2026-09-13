@@ -146,13 +146,29 @@ tests/CMakeFiles/vectorforge_tests.dir/test_ivfpq_index.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_tests.dir/test_ivfpq_index.cpp.s"
 	cd /d C:\Users\dasra\Desktop\vector-forge\build\tests && C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\tests\test_ivfpq_index.cpp -o CMakeFiles\vectorforge_tests.dir\test_ivfpq_index.cpp.s
 
+tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj: tests/CMakeFiles/vectorforge_tests.dir/flags.make
+tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj: tests/CMakeFiles/vectorforge_tests.dir/includes_CXX.rsp
+tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj: C:/Users/dasra/Desktop/vector-forge/tests/test_vamana_index.cpp
+tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj: tests/CMakeFiles/vectorforge_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj"
+	cd /d C:\Users\dasra\Desktop\vector-forge\build\tests && C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj -MF CMakeFiles\vectorforge_tests.dir\test_vamana_index.cpp.obj.d -o CMakeFiles\vectorforge_tests.dir\test_vamana_index.cpp.obj -c C:\Users\dasra\Desktop\vector-forge\tests\test_vamana_index.cpp
+
+tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.i"
+	cd /d C:\Users\dasra\Desktop\vector-forge\build\tests && C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\dasra\Desktop\vector-forge\tests\test_vamana_index.cpp > CMakeFiles\vectorforge_tests.dir\test_vamana_index.cpp.i
+
+tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.s"
+	cd /d C:\Users\dasra\Desktop\vector-forge\build\tests && C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\dasra\Desktop\vector-forge\tests\test_vamana_index.cpp -o CMakeFiles\vectorforge_tests.dir\test_vamana_index.cpp.s
+
 # Object files for target vectorforge_tests
 vectorforge_tests_OBJECTS = \
 "CMakeFiles/vectorforge_tests.dir/test_dataset.cpp.obj" \
 "CMakeFiles/vectorforge_tests.dir/test_brute_force_index.cpp.obj" \
 "CMakeFiles/vectorforge_tests.dir/test_storage.cpp.obj" \
 "CMakeFiles/vectorforge_tests.dir/test_ivf_index.cpp.obj" \
-"CMakeFiles/vectorforge_tests.dir/test_ivfpq_index.cpp.obj"
+"CMakeFiles/vectorforge_tests.dir/test_ivfpq_index.cpp.obj" \
+"CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj"
 
 # External object files for target vectorforge_tests
 vectorforge_tests_EXTERNAL_OBJECTS =
@@ -162,6 +178,7 @@ tests/vectorforge_tests.exe: tests/CMakeFiles/vectorforge_tests.dir/test_brute_f
 tests/vectorforge_tests.exe: tests/CMakeFiles/vectorforge_tests.dir/test_storage.cpp.obj
 tests/vectorforge_tests.exe: tests/CMakeFiles/vectorforge_tests.dir/test_ivf_index.cpp.obj
 tests/vectorforge_tests.exe: tests/CMakeFiles/vectorforge_tests.dir/test_ivfpq_index.cpp.obj
+tests/vectorforge_tests.exe: tests/CMakeFiles/vectorforge_tests.dir/test_vamana_index.cpp.obj
 tests/vectorforge_tests.exe: tests/CMakeFiles/vectorforge_tests.dir/build.make
 tests/vectorforge_tests.exe: libvectorforge_lib.a
 tests/vectorforge_tests.exe: lib/libgtest_main.a
@@ -171,7 +188,7 @@ tests/vectorforge_tests.exe: lib/libgtest.a
 tests/vectorforge_tests.exe: tests/CMakeFiles/vectorforge_tests.dir/linkLibs.rsp
 tests/vectorforge_tests.exe: tests/CMakeFiles/vectorforge_tests.dir/objects1.rsp
 tests/vectorforge_tests.exe: tests/CMakeFiles/vectorforge_tests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable vectorforge_tests.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\dasra\Desktop\vector-forge\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable vectorforge_tests.exe"
 	cd /d C:\Users\dasra\Desktop\vector-forge\build\tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\vectorforge_tests.dir\link.txt --verbose=$(VERBOSE)
 	cd /d C:\Users\dasra\Desktop\vector-forge\build\tests && C:\msys64\ucrt64\bin\cmake.exe -D TEST_TARGET=vectorforge_tests -D TEST_EXECUTABLE=C:/Users/dasra/Desktop/vector-forge/build/tests/vectorforge_tests.exe -D TEST_EXECUTOR= -D TEST_WORKING_DIR=C:/Users/dasra/Desktop/vector-forge/build/tests -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=vectorforge_tests_TESTS -D CTEST_FILE=C:/Users/dasra/Desktop/vector-forge/build/tests/vectorforge_tests[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_DISCOVERY_EXTRA_ARGS= -D TEST_XML_OUTPUT_DIR= -P C:/msys64/ucrt64/share/cmake/Modules/GoogleTestAddTests.cmake
 
